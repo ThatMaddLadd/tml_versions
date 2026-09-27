@@ -1,0 +1,50 @@
+{
+  "products": [
+    {
+      "slug": "tml-pager",
+      "name": "TML Pager",
+      "summary": "A pager for every player on the server, with retro looks and modern features: an LCD screen, four hardware buttons and a translucent purple shell.",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
+        }
+      ]
+    },
+    {
+      "slug": "tml-admin-panel",
+      "name": "TML Admin Panel",
+      "summary": "An in-game administration panel for FiveM by ThatMaddLadd.",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
+        }
+      ]
+    }
+  ]
+}
