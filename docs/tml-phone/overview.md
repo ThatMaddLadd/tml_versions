@@ -31,9 +31,9 @@ you can edit them.
 - [oxmysql](https://github.com/overextended/oxmysql) (tables are created automatically)
 - One of the supported frameworks, or standalone
 
-Optional: an inventory for phone items, pma-voice or saltychat for call audio,
-[screencapture](https://github.com/itschip/screencapture) and an image host for the Camera, ox_lib for
-notifications, a dispatch or banking script from the supported lists.
+Optional: an inventory for phone items, pma-voice or saltychat for call audio, an image host such as Fivemanage for
+the Camera (the phone takes the photos itself; no screenshot resource needed), ox_lib for notifications, a dispatch or
+banking script from the supported lists.
 
 ## Install
 
@@ -50,6 +50,8 @@ Details, item snippets for every inventory and photo upload setup: install/READM
 - **Left Alt** hands the mouse back to the game while the phone stays on screen (walk, drive, aim the camera); press
   it again to use the phone with the mouse.
 - Smartphone: apps are added and removed in the App Store, and arranged by holding an icon.
+- Too big or too small for your screen? Settings > Phone size (smartphone: under Display). It's saved on your own
+  computer and used for every phone you carry.
 - Admins (`add_ace group.admin tml_phone.admin allow`): `/phonebattery <0-100> [id]`, remove anyone's ad, add songs
   everyone gets in Music.
 

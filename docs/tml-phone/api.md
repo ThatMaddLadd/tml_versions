@@ -8,7 +8,8 @@ Functions that can fail return `nil` or `false` plus an **error code** string (`
 
 ## Contents
 
-- [Server exports](#server-exports): [phones](#phones) · [messages](#messages) · [calls](#calls) ·
+- [Server exports](#server-exports): [phones](#phones) (incl. blocking, notifications, contacts) ·
+  [messages](#messages) · [calls](#calls) · [evidence](#evidence-mdt-and-police-scripts) ·
   [custom numbers](#custom-numbers) · [mail](#mail) · [calendar](#calendar) · [wallet](#wallet) · [ads](#ads) ·
   [music](#music) · [battery](#battery) · [script apps](#script-apps)
 - [Server events](#server-events)
@@ -80,6 +81,56 @@ A copy of the active phone's settings (theme, ringtone, `silent`, `dnd`, `airpla
 
 #### `IsAirplaneMode(src)` → `boolean`
 
+#### `SetPhoneBlocked(src, reason, blocked)` → `boolean, err?`
+
+Stops a player using their phone (`true`) or lets them again (`false`): for handcuffs, being knocked out, a
+cutscene. While blocked the phone won't open (the player is told they can't use it right now), every request is
+refused, they can't answer calls, and service numbers don't ring them. Blocking also puts the phone away and ends a
+call they're on.
+
+Each script blocks under its own `reason` (up to 64 characters, 16 per player), so one script lifting its block never
+lifts another's: the phone is free once every reason is lifted. Blocks are cleared when the player leaves.
+
+```lua
+exports.tml_phone:SetPhoneBlocked(target, 'police:cuffs', true)   -- cuffed
+exports.tml_phone:SetPhoneBlocked(target, 'police:cuffs', false)  -- uncuffed
+```
+
+Errors: `'not_found'` (no such player), `'bad_request'`. Reasons starting with `client:` belong to client scripts
+(the client export of the same name).
+
+#### `IsPhoneBlocked(src)` → `boolean, reasons`
+
+`reasons` lists every reason it's blocked under.
+
+#### `SendNotification(target, data)` → `boolean, err?`
+
+A notification on a player's phone, from any script, without registering an app: `data = { title, body?, icon? }`.
+Title up to 60 characters, body up to 200. `icon` is one of the [phone's icons](#script-apps) (`bell` when left out
+or unknown). It respects the player's silent and do-not-disturb settings.
+
+```lua
+exports.tml_phone:SendNotification(source, { title = 'Benny\'s', body = 'Your car is ready to collect.', icon = 'car' })
+```
+
+Errors: `'no_phone'` (not carried by anyone online), `'battery_dead'`, `'bad_request'`.
+
+#### `AddContact(target, number, name)` → `contact|nil, err?`
+
+Saves a contact on a phone (a job's number, "Your lawyer"). Returns `{ id, number, name, favourite }`. An open phone
+shows it straight away.
+
+```lua
+exports.tml_phone:AddContact(source, '555-0100', 'Mechanic Shop')
+```
+
+Errors: `'no_phone'`, `'not_allowed'` (the Contacts app is switched off, `Config.CoreApps`), `'contact_name'`,
+`'number_invalid'`, `'contact_limit'`, `'contact_exists'`.
+
+#### `GetContacts(target)` → `table[]|nil, err?`
+
+A phone's contacts: `{ { id, number, name, favourite } }`, by name.
+
 ### Messages
 
 #### `SendMessage(from, to, body, attachments?)` → `message|nil, err?`
@@ -107,6 +158,52 @@ On a call, or the phone is ringing.
 #### `EndCall(src)` → `boolean`
 
 Hangs up the player's current call.
+
+#### `StartCall(src, number, video?)` → `call|nil, err?`
+
+Calls a number from the player's active phone, as if they dialled it: a payphone, a "call this business" button. The
+phone opens on the call screen. `video = true` makes it a video call (smartphone). Works with service and custom
+numbers too.
+
+```lua
+exports.tml_phone:StartCall(source, '311')
+```
+
+Errors are the same as dialling on the phone: `'no_phone'`, `'locked'` (the phone opens on its lock screen),
+`'phone_blocked'`, `'battery_dead'`, `'airplane'`, `'in_call'`, `'number_invalid'`, `'self'`, `'unavailable'`,
+`'busy'`, `'service_unavailable'`.
+
+### Evidence (MDT and police scripts)
+
+These read a phone's private data. They are exports, so only your server scripts can call them; players never can.
+Use them from scripts that already check who is asking, such as an MDT searching a seized phone. They return what
+the phone itself shows: messages or calls its owner cleared are left out.
+
+#### `GetMessages(number, other?, limit?)` → `table[]|nil, err?`
+
+The phone's messages, newest first, across all conversations, or only the one-to-one conversation with `other`.
+`limit` 1-500 (default 50).
+
+```lua
+{ id, conversationId, sender, senderDisplay, body, attachments, created, outgoing, isGroup, groupName }
+```
+
+#### `GetCallLog(number, limit?)` → `table[]|nil, err?`
+
+`{ id, direction = 'in'|'out', number?, display?, label?, status = 'answered'|'missed'|'declined', started, duration }`,
+newest first. `number` is missing for a caller who hid their number. `limit` 1-500 (default 50).
+
+#### `GetPhotos(number, limit?)` → `table[]|nil, err?`
+
+The gallery, newest first: `{ id, url, created }`. `limit` 1-500 (default 50).
+
+#### `AddPhoto(target, url)` → `photo|nil, err?`
+
+Puts an image in a phone's gallery (an evidence photo, a mugshot). The link must be `https` on an allowed host
+(`ServerConfig.Uploads.allowedHosts` or `Config.Photos.linkHosts`) and counts toward `Config.Camera.maxPhotos`.
+Errors: `'no_phone'`, `'photo_link'`, `'photo_limit'`.
+
+All four return `nil, 'no_phone'` for an unknown number and `nil, 'bad_request'` for a bad `other` or `limit`.
 
 ### Custom numbers
 
@@ -337,6 +434,8 @@ Other `tml_phone:*` events (`tml_phone:server:*`, `tml_phone:client:*` net event
 | `Open()` | opens the active phone (same as the command) |
 | `Close()` | closes it |
 | `SendAppMessage(id, data)` | sends `data` to your script app's page while the phone is on screen; `false` when it isn't |
+| `SetPhoneBlocked(reason, blocked)` | the client side of [`SetPhoneBlocked`](#setphoneblockedsrc-reason-blocked--boolean-err), for client scripts (a death or ragdoll script). Stored as `client:<reason>`, so it never lifts a server script's block |
+| `IsPhoneBlocked()` | `boolean`: blocked by any script, server or client |
 
 ## Client events
 

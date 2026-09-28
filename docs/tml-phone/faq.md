@@ -50,8 +50,12 @@ each other's IP address when `Config.Calls.videoRelayOnly = true`.
 ## Camera and photos
 
 **The Camera app says the camera isn't set up.**
-It needs the screencapture resource (started before `tml_phone`) and an image host. For Fivemanage, set the key in
-server.cfg: `set tml_phone_fivemanage_key "your-key"`, then restart. Full guide: `bridge/uploads/README.md`.
+It needs an image host to store the photos (the phone takes them itself; no screenshot resource is needed). For
+Fivemanage, set the key in server.cfg: `set tml_phone_fivemanage_key "your-key"`, then restart. Full guide:
+`bridge/uploads/README.md`.
+
+**Do I need screencapture or screenshot-basic?**
+No. The phone takes its own photos. You can keep those resources for other scripts; the phone doesn't use them.
 
 **The console says the upload failed with HTTP 401.**
 The image host refused the key. Copy it again from your Fivemanage dashboard and set it with double quotes, no spaces
@@ -99,9 +103,18 @@ detected; the payment still happens, it just isn't listed as a statement.
 Wrong guesses lock the phone for longer each time. An admin can remove the PIN from a script, such as
 your admin menu: `exports.tml_phone:ResetPin('555-0123')`. A factory reset (`FactoryReset`) wipes the phone completely.
 
+**How do I stop cuffed or dead players using their phone?**
+Call `exports.tml_phone:SetPhoneBlocked(source, 'police:cuffs', true)` from your cuff script (server), or the client
+export of the same name from a death script, and `false` to lift it. Each script uses its own reason, so they never
+cancel each other out. See `docs/API.md`.
+
 **Can I add another language?**
 Copy `config/locales/en.lua` to a new file (`fr.lua`), translate the values, and set `Config.Locale = 'fr'`. Players
 can also pick it for their own phone during setup. Missing keys fall back to English.
+
+**The phone is too big or too small on my screen.**
+Each player sets their own size: smartphone Settings > Display > Phone size, flip phone Settings > Phone size. It's
+kept on their computer, so it follows them to every phone. You set the default and the limits in `Config.Display`.
 
 **Can I change the look?**
 Players pick a design (TML Rail, Island, Classic, Pear), a colour theme, light or dark mode, and a wallpaper in

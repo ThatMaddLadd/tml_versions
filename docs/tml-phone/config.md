@@ -8,7 +8,7 @@ the server console and uses the default below, so a typo never breaks the phone.
 ## Contents
 
 - [General](#general) · [Bridge](#bridge) · [Devices](#devices) · [Opening the phone](#opening-the-phone) ·
-  [Mouse focus](#mouse-focus) · [Phones and ownership](#phones-and-ownership) · [Phone numbers](#phone-numbers) ·
+  [Mouse focus](#mouse-focus) · [Phone size](#phone-size) · [Phones and ownership](#phones-and-ownership) · [Phone numbers](#phone-numbers) ·
   [PIN lock](#pin-lock) · [First-boot setup](#first-boot-setup)
 - [Contacts](#contacts) · [Messages](#messages) · [Calls and video calls](#calls-and-video-calls) ·
   [Service numbers](#service-numbers)
@@ -40,7 +40,7 @@ the server console and uses the default below, so a typo never breaks the phone.
 | `Config.Voice` | `'auto'` | `'pma-voice'` `'saltychat'` `'none'` `'custom'`: carries the audio of calls |
 | `Config.Dispatch` | `'auto'` | `'ps-dispatch'` `'cd_dispatch'` `'core_dispatch'` `'standalone'` `'custom'`: alerts from service texts |
 | `Config.Banking` | `'auto'` | `'renewed-banking'` `'okokBanking'` `'qs-banking'` `'fd_banking'` `'tgg-banking'` `'snipe-banking'` `'pefcl'` `'qb-banking'` `'esx_banking'` `'framework'` `'custom'`: where Wallet payments show up as statements |
-| `Config.Uploads` | `'auto'` | `'fivemanage'` `'none'` `'custom'`: where Camera photos are stored (keys in `config/server.lua`) |
+| `Config.Uploads` | `'auto'` | `'fivemanage'` `'none'` `'custom'`: where Camera photos are stored (keys in `config/server.lua`). `'auto'` = `'fivemanage'`, ready once its key is set |
 | `Config.Speaker` | `'auto'` | `'builtin'` `'xsound'` `'none'` `'custom'`: Music played out loud to players nearby. `'auto'` = `'builtin'` (needs no other script); `'none'` = only the holder hears it |
 
 The framework adapters refuse a payment the player can't afford, even on frameworks whose bank balance may go
@@ -78,6 +78,18 @@ them in GTA's key settings (FiveM section).
 | `Config.Focus.toggle` | `{ enabled = true, key = 'LMENU' }` | the focus toggle |
 | `Config.Focus.keys` | `up = 'UP'`, `down = 'DOWN'`, `left = 'LEFT'`, `right = 'RIGHT'`, `ok = 'RETURN'`, `clear = 'BACK'` | phone key = keyboard key while unfocused. Phone keys: `up` `down` `left` `right` `ok` `back` `soft1` `soft2` `call` `end` `clear` |
 | `Config.Focus.disabledControls` | attack, aim, melee, weapon wheel and slots, cover, reload, duck, vehicle aim, radio wheel, Alt wheel, pause menu, vehicle mouse control | GTA control ids switched off while the phone has the mouse ([list](https://docs.fivem.net/docs/game-references/controls/)). The player can still walk and drive |
+
+## Phone size
+
+Players make their phone bigger or smaller themselves: smartphone Settings > Display > Phone size (− / + in 5%
+steps, tap the size to reset it), flip phone Settings > Phone size (left / right, OK resets it). The size is kept on
+the player's own computer, so it fits their screen whichever phone they pick up, and the phone stays in its corner.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `Config.Display.scale` | `1.0` | size for players who haven't changed it (1.0 = normal) |
+| `Config.Display.minScale` | `0.7` | smallest size players can pick (0.5 - 2) |
+| `Config.Display.maxScale` | `1.3` | largest size players can pick (0.5 - 2) |
 
 ## Phones and ownership
 
@@ -376,8 +388,8 @@ be online). Payments also show up in your banking script (`Config.Banking`).
 
 ## Camera and Photos
 
-The Camera needs the screencapture resource and an image host (`Config.Uploads`, keys in `config/server.lua`; guide
-in `bridge/uploads/README.md`). In the camera: Enter or left click takes a photo, Up switches between the rear and
+The phone takes photos itself (no screenshot resource needed); it only needs an image host to store them
+(`Config.Uploads`, keys in `config/server.lua`; guide in `bridge/uploads/README.md`). In the camera: Enter or left click takes a photo, Up switches between the rear and
 selfie cameras, Backspace or right click closes it.
 
 | Option | Default | Meaning |
