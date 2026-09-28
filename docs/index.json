@@ -45,6 +45,29 @@
           "title": "FAQ"
         }
       ]
+    },
+    {
+      "slug": "tml-phone",
+      "name": "TML Phone",
+      "summary": "A flip phone and a smartphone on one shared core. Both run on the same numbers, contacts and messages, so a player can text from a smartphone to a friend's flip phone.",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
+        }
+      ]
     }
   ]
 }

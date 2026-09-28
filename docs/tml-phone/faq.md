@@ -1,0 +1,113 @@
+## Install
+
+**The phone doesn't open.**
+Check that `ensure tml_phone` comes after oxmysql, your framework and your inventory in server.cfg. With an inventory,
+the player needs a phone item (`tml_flipphone` or `tml_smartphone`; add them from `install/`). A phone at 0% battery
+shows a charge screen instead: charge it in a vehicle with the engine running, or `/phonebattery 100` as an admin.
+
+**Which framework, inventory and voice script is it using?**
+The server console prints them on start: `framework=qbox inventory=ox_inventory notify=ox_lib voice=pma-voice ...`.
+Force one in `config/config.lua` (`Config.Framework = 'esx'`, ...). `standalone` / `none` means nothing was found:
+usually a start-order problem.
+
+**The console prints config warnings on start.**
+The config is checked on start. Each warning names the option, what was wrong with it, and the default it used
+instead, so the phone still works. Fix the value in `config/config.lua` and restart.
+
+**Using the item does nothing (ox_inventory).**
+The item definition must contain `server = { export = 'tml_phone.use_item' }` and `consume = 0`, exactly as in
+`install/ox_inventory.txt`.
+
+**Every phone item should have its own number, but they share one.**
+That's `'character'` mode. `Config.Phones.mode = 'unique'` (the default) needs an inventory that stores data on items:
+ox_inventory, qb-inventory, ps-inventory and qs-inventory do. On codem-inventory and core_inventory the phone falls
+back to one number per character and says so in the console; their adapters explain how to switch it on if your
+version supports item data. ESX's own default inventory has no adapter, so there the phone runs without items.
+
+**Can I rename the resource?**
+Keep the name `tml_phone`: the item export (`tml_phone.use_item`), the app SDK address and other scripts' exports use
+it.
+
+**Can I test alone?**
+With `Config.Debug = true` you can text and call your own number, and admins get `/tml_phone_*` test commands. Turn
+it off on a live server.
+
+## Calls
+
+**Calls connect but nobody hears anything.**
+The voice script carries call audio. Check the console line shows `voice=pma-voice` (or `saltychat`). `voice=none`
+means none was detected: start your voice script before `tml_phone`.
+
+**Service numbers (911) don't ring anyone.**
+Only players with a job in the service's `jobs` list ring, and only while on duty if `onDutyOnly = true`. They also
+need a phone that isn't dead.
+
+**Video calls show no picture.**
+The two players' games connect directly for video. Some home routers block that; add a TURN server to
+`Config.Calls.videoIce` (see `docs/CONFIG.md`, "Video and IP addresses"). A TURN server also stops players from seeing
+each other's IP address when `Config.Calls.videoRelayOnly = true`.
+
+## Camera and photos
+
+**The Camera app says the camera isn't set up.**
+It needs the screencapture resource (started before `tml_phone`) and an image host. For Fivemanage, set the key in
+server.cfg: `set tml_phone_fivemanage_key "your-key"`, then restart. Full guide: `bridge/uploads/README.md`.
+
+**The console says the upload failed with HTTP 401.**
+The image host refused the key. Copy it again from your Fivemanage dashboard and set it with double quotes, no spaces
+inside. Restart the server after changing server.cfg.
+
+**A photo sometimes fails to save.**
+A dropped connection or a busy host. The phone sends the same photo again (`Config.Camera.uploadRetries`, 2 by
+default) before giving up; if it still fails, the console shows the host's answer.
+
+**"Add from link" refuses my image.**
+Only direct image links from `Config.Photos.linkHosts` are accepted: the address of the image file itself
+(`https://i.imgur.com/abc.png`, not `https://imgur.com/abc`). Discord links expire, so they aren't allowed by default.
+
+## Music
+
+**A song won't play.**
+Songs must be direct audio links (`https://...mp3` / `.ogg`), not YouTube or Spotify pages, from a site in
+`Config.Music.linkHosts`. Staff with `Config.Music.curateAce` can add curated songs from any https link.
+
+**Nobody else hears the speaker.**
+The speaker button must be on, and other players within `Config.Music.speaker.distance` (20 m) hear it, quieter the
+further away they are. It works without any other script; `Config.Speaker = 'xsound'` uses xsound instead.
+
+## Maps
+
+**The map is blank or says it couldn't be loaded.**
+The Maps app draws the game's own map from each player's game files, so it needs nothing from you, and map mods
+(postal codes, satellite style) show through. When the textures can't be loaded, the app says so and shows a plain
+grid with the markers instead.
+
+## Money
+
+**A Wallet payment is refused.**
+The receiver must be online and carry that phone, the amount must be between `Config.Wallet.minAmount` and
+`maxAmount`, and the sender must have the money: the phone never lets a bank balance go negative, even on frameworks
+that allow it.
+
+**Payments don't show in my banking app.**
+Check the console line shows your banking script (`banking=renewed-banking`, ...). `banking=framework` means none was
+detected; the payment still happens, it just isn't listed as a statement.
+
+## Other
+
+**A player forgot their PIN.**
+Wrong guesses lock the phone for longer each time. An admin can remove the PIN from a script, such as
+your admin menu: `exports.tml_phone:ResetPin('555-0123')`. A factory reset (`FactoryReset`) wipes the phone completely.
+
+**Can I add another language?**
+Copy `config/locales/en.lua` to a new file (`fr.lua`), translate the values, and set `Config.Locale = 'fr'`. Players
+can also pick it for their own phone during setup. Missing keys fall back to English.
+
+**Can I change the look?**
+Players pick a design (TML Rail, Island, Classic, Pear), a colour theme, light or dark mode, and a wallpaper in
+Settings. You choose which designs and themes exist (`Config.Designs`, `Config.Themes`). The flip phone's colours are
+in `web/theme.css`.
+
+**My framework or inventory isn't in the list.**
+Everything in `bridge/` is open and editable. Copy the closest adapter or the `custom.lua` template;
+`bridge/README.md` explains each contract.
