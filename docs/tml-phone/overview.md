@@ -49,7 +49,9 @@ Details, item snippets for every inventory and photo upload setup: install/READM
 - `/phone` or **F2** opens the phone (rebindable in GTA's key settings), as does using a phone item.
 - **Left Alt** hands the mouse back to the game while the phone stays on screen (walk, drive, aim the camera); press
   it again to use the phone with the mouse.
-- Smartphone: apps are added and removed in the App Store, and arranged by holding an icon.
+- Smartphone: apps are added and removed in the App Store, and arranged by holding an icon. The home screen has up to
+  five pages: swipe, scroll the mouse wheel, use the arrow keys or click the dots. While moving an icon, hold it at the
+  side of the screen to carry it to the next page.
 - Too big or too small for your screen? Settings > Phone size (smartphone: under Display). It's saved on your own
   computer and used for every phone you carry.
 - Admins (`add_ace group.admin tml_phone.admin allow`): `/phonebattery <0-100> [id]`, remove anyone's ad, add songs

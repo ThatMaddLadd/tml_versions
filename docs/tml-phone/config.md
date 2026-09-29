@@ -205,7 +205,8 @@ Other scripts can add their own numbers with `RegisterCustomNumber` (docs/API.md
 ## Smartphone apps
 
 Settings is always installed. Players install and remove apps in the App Store and arrange the home screen by holding
-an icon.
+an icon. The home screen has up to five pages that players swipe between. To move an icon to another page, drag it to
+the side of the screen.
 
 | Option | Default | Meaning |
 |---|---|---|
