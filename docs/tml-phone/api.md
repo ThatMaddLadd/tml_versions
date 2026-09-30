@@ -10,7 +10,8 @@ Functions that can fail return `nil` or `false` plus an **error code** string (`
 
 - [Server exports](#server-exports): [phones](#phones) (incl. blocking, notifications, contacts) ·
   [messages](#messages) · [calls](#calls) · [evidence](#evidence-mdt-and-police-scripts) ·
-  [custom numbers](#custom-numbers) · [mail](#mail) · [calendar](#calendar) · [wallet](#wallet) · [ads](#ads) ·
+  [custom numbers](#custom-numbers) · [mail](#mail) · [calendar](#calendar) · [bank](#bank) · [ads](#ads) ·
+  [chirp and lens](#chirp-and-lens) · [marketplace](#marketplace) · [news](#news) · [garage](#garage) ·
   [music](#music) · [battery](#battery) · [script apps](#script-apps)
 - [Server events](#server-events)
 - [Client exports](#client-exports)
@@ -69,7 +70,8 @@ Gives a phone a new number. Errors: `'not_found'`, `'number_invalid'`, `'number_
 #### `FactoryReset(number)` → `boolean, err?`
 
 Wipes everything on the phone: contacts, blocks, messages, call log, notes, alarms, calendar, mail, ads, places,
-Dark Chat, Wallet history, photos, songs, settings, home screen, first-boot setup and PIN. The number stays.
+Dark Chat, Bank history and payment requests, Marketplace listings and saved ones, photos, songs, settings, home
+screen, first-boot setup and PIN, and logs it out of Chirp / Lens (the accounts stay). The number stays.
 
 #### `ResetPin(number)` → `boolean, err?`
 
@@ -288,11 +290,13 @@ ahead, or longer than `Config.Calendar.maxDurationDays`). Players can hide share
 
 Events between two unix times: what a phone sees (server id or number), or those stored for a job or `'all'`.
 
-### Wallet
+### Bank
+
+The Bank app kept the Wallet's id, so its export keeps the Wallet name.
 
 #### `AddWalletTransaction(target, entry)` → `id|nil`
 
-Adds a line to a phone's Wallet history for a payment your script made (shop, fine, salary). It does **not** move
+Adds a line to a phone's Bank history for a payment your script made (shop, fine, salary). It does **not** move
 money: change the balance through your framework as usual.
 
 ```lua
@@ -308,6 +312,65 @@ exports.tml_phone:AddWalletTransaction(source, { amount = 250, direction = 'out'
 Live ads, newest first (at most 30): `{ id, category, title, body, price, name, number, display, created, expires }`.
 
 #### `DeleteAd(id)` → `boolean`
+
+### Chirp and Lens
+
+Accounts are shared by both apps and found by handle (any case).
+
+#### `GetSocialAccount(handle)` → `table|nil`
+
+`{ handle, name, bio?, avatar?, verified, banned, followers, following, created }`.
+
+#### `SetSocialVerified(handle, verified)` → `boolean`
+
+Gives or takes the verified badge (a business, a government account). `false` when there's no such account.
+
+#### `SetSocialBanned(handle, banned)` → `boolean`
+
+Suspends an account (its posts are hidden, it can't log in or post) or lifts it.
+
+#### `DeleteSocialPost(id)` → `boolean`
+
+Deletes a post with its replies / comments and plain reposts of it (post ids come with the `socialPost` event).
+
+### Marketplace
+
+#### `GetMarketListings(category?)` → `table[]`
+
+Listings for sale, newest first (at most 20): `{ id, category, title, body, price, photos, name, number, display,
+sold, created, expires }`.
+
+#### `DeleteMarketListing(id)` → `boolean`
+
+### News
+
+#### `PublishNews(data)` → `id|nil, err?`
+
+```lua
+exports.tml_phone:PublishNews({
+  title = 'Bank robbery on Vinewood Blvd',
+  body = 'Police have closed the street...',   -- blank lines start new paragraphs
+  author = 'LSPD Press Office',                -- shown as the writer (default: the locale's "Newsroom")
+  image = 'https://r2.fivemanage.com/...',     -- optional; must be on an allowed host (Camera uploads or Config.Photos.linkHosts)
+  breaking = true,                             -- also send every phone with News a notification
+})
+```
+
+Errors: `'bad_request'`, `'news_title'`, `'news_body'`, `'bad_attachment'` (image not on an allowed host).
+
+#### `DeleteNews(id)` → `boolean`
+
+#### `GetNews(limit?)` → `table[]`
+
+The newest articles (1-50, default 20): `{ id, title, body (a preview), image, author, breaking, created }`.
+
+### Garage
+
+#### `GetGarageVehicles(src)` → `table[]`
+
+The player's vehicles as the Garage app shows them, through `Config.Garage`: `{ plate, model, label?, state
+('out'|'garage'|'impound'), garage?, garageLabel?, fuel?, engine?, body? }` (fuel and damage in percent, when the
+garage script keeps them).
 
 ### Music
 
@@ -347,10 +410,10 @@ file from **your** resource, loaded in a frame inside the phone. See [App SDK](#
 
 ```lua
 exports.tml_phone:RegisterApp({
-  id = 'garage',                  -- a-z, 0-9, _ (2-24 characters)
-  label = 'Garage',
-  description = 'Your vehicles',  -- shown in the App Store
-  icon = 'car',                   -- one of the phone's icons (below), or image = 'web/icon.png' (a file in your resource)
+  id = 'fishing',                 -- a-z, 0-9, _ (2-24 characters)
+  label = 'Fishing',
+  description = 'Your catches',   -- shown in the App Store
+  icon = 'star',                  -- one of the phone's icons (below), or image = 'web/icon.png' (a file in your resource)
   color = '#22C55E',              -- or { '#22C55E', '#15803D' } for a gradient
   ui = 'web/app.html',            -- the page, a file in your resource (list it in your fxmanifest `files`)
   fullscreen = false,             -- true = the page also covers the status bar
@@ -364,8 +427,9 @@ every start) to update it. An installed app stays on players' phones while your 
 Icons: `phone` `message` `user` `users` `settings` `calculator` `search` `star` `clock` `calendar` `bag` `notes`
 `mail` `inbox` `at` `flashlight` `alarm` `timer` `stopwatch` `sliders` `palette` `siren` `shield` `medical` `car`
 `wrench` `flame` `briefcase` `megaphone` `map` `navigation` `tag` `bank` `fuel` `food` `building` `flag` `bookmark`
-`wallet` `camera` `video` `terminal` `key` `globe` `link` `music` `image` `lock` `bell` `speaker` `zap`. For anything
-else, use `image`.
+`wallet` `camera` `video` `terminal` `key` `globe` `link` `music` `image` `lock` `bell` `speaker` `zap` `heart`
+`repeat` `bird` `aperture` `newspaper` `store` `badgeCheck` `trendingUp` `receipt` `gauge` `warehouse` `layoutGrid`
+`quote` `userCheck` `eye` `house`. For anything else, use `image`.
 
 #### `UnregisterApp(id)` → `boolean`
 
@@ -413,7 +477,19 @@ AddEventHandler('tml_phone:messageReceived', function(number, from, body, conver
 | `tml_phone:alarm` | `src, number, alarm` |
 | `tml_phone:adPosted` | `src, number, { id, category, title, price }` |
 | `tml_phone:adDeleted` | `id` |
-| `tml_phone:walletPayment` | `src, targetSrc, fromNumber, toNumber, amount, note` |
+| `tml_phone:walletPayment` | `src, targetSrc, fromNumber, toNumber, amount, note` (Bank payments, requests paid included) |
+| `tml_phone:walletRequest` | `src, fromNumber, toNumber, amount, note` (asked a number for money) |
+| `tml_phone:walletRequestAnswered` | `src, askerNumber, payerNumber, amount, paid` |
+| `tml_phone:businessMoney` | `src, account, direction ('in' deposit \| 'out' withdrawal), amount, note` |
+| `tml_phone:socialAccountCreated` | `src, number, handle` |
+| `tml_phone:socialPost` | `src, number, app ('chirp'\|'lens'), handle, postId, body` (posts, replies and comments) |
+| `tml_phone:socialReport` | `src, number, app, postId, reporterHandle, reason ('spam'\|'abuse'\|'other')` |
+| `tml_phone:socialModerated` | `src, handle, action ('ban'\|'unban'\|'verify'\|'unverify')` |
+| `tml_phone:marketListed` | `src, number, { id, category, title, price }` |
+| `tml_phone:marketSold` | `src, number, id` |
+| `tml_phone:marketDeleted` | `id` |
+| `tml_phone:newsPublished` | `src (nil from PublishNews), id, title, breaking` |
+| `tml_phone:newsDeleted` | `id` |
 | `tml_phone:photoTaken` | `src, number, url` |
 | `tml_phone:photoAdded` | `src, number, url` (from a link) |
 | `tml_phone:musicCurated` | `'add'\|'remove', song` |
@@ -479,6 +555,13 @@ event.
 add_ace group.admin tml_phone.admin allow
 ```
 
-`tml_phone.admin` is the default for `Config.Pin.adminAce` (`/phonebattery`),
-`Config.Ads.moderatorAce` (take down any ad) and `Config.Music.curateAce` (curated songs in game). Each can be set to
-a different ACE.
+`tml_phone.admin` is the default for `Config.Pin.adminAce` (`/phonebattery`), `Config.Ads.moderatorAce` (take down
+any ad), `Config.Music.curateAce` (curated songs in game), `Config.Social.moderatorAce` (Chirp and Lens: delete posts,
+suspend accounts, verified badges), `Config.Marketplace.moderatorAce` (take down any listing) and
+`Config.News.moderatorAce` (take down any article). Each can be set to a different ACE.
+
+News writers come from `Config.News.jobs`; to let someone write whatever their job, give them `tml_phone.news`:
+
+```
+add_ace identifier.license:xxxxxxxx tml_phone.news allow
+```

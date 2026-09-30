@@ -88,7 +88,16 @@ grid with the markers instead.
 
 ## Money
 
-**A Wallet payment is refused.**
+**Where did the Wallet app go?**
+It's the Bank app now (1.1.0): same id and settings (`Config.Apps.wallet`, `Config.Wallet`), so phones that had Wallet
+installed have Bank, and your config works unchanged. It adds payment requests and the job account.
+
+**Business doesn't show in the Bank app.**
+The player's job must be in `Config.Wallet.business.jobs` with at least that grade. If it shows "not available", your
+banking script (`Config.Banking`) has no account under the job's name: create one there, or use
+`bridge/banking/custom.lua` to map job names to your account names.
+
+**A Bank payment is refused.**
 The receiver must be online and carry that phone, the amount must be between `Config.Wallet.minAmount` and
 `maxAmount`, and the sender must have the money: the phone never lets a bank balance go negative, even on frameworks
 that allow it.
@@ -96,6 +105,33 @@ that allow it.
 **Payments don't show in my banking app.**
 Check the console line shows your banking script (`banking=renewed-banking`, ...). `banking=framework` means none was
 detected; the payment still happens, it just isn't listed as a statement.
+
+## Chirp, Lens, Marketplace, News, Garage
+
+**Is a Chirp / Lens account tied to the phone or the character?**
+Neither: it's a handle and a password. Players log in on any phone, and the phone stays logged in until someone logs
+out in the app, so a stolen phone can post as its owner until they change the password (which logs every other phone
+out). `Config.Social.accountsPerCharacter` limits how many accounts one character can create.
+
+**How do I moderate Chirp and Lens?**
+Give moderators `Config.Social.moderatorAce` (default `tml_phone.admin`). In the app they can delete any post (its "…"
+menu) and suspend accounts or give the verified badge (a profile's "…" menu). Set `ServerConfig.Social.webhook` in
+`config/server.lua` to get player reports in Discord. Scripts can do the same with `SetSocialBanned`,
+`SetSocialVerified` and `DeleteSocialPost`.
+
+**Photos don't show up to pick in Chirp, Lens, Marketplace or News.**
+The pickers use the phone's gallery, so players need photos taken with the Camera (an image host must be set up,
+`Config.Uploads`) or added from a link in Photos.
+
+**Who can write News?**
+The jobs in `Config.News.jobs` (job name = lowest grade), or anyone with the `tml_phone.news` ACE. Scripts can publish
+with `PublishNews`.
+
+**The Garage app shows no vehicles.**
+The console prints which garage adapter was picked (`garage=...`). If your garage script isn't jg-advancedgarages or
+cd_garage, the framework adapter reads your framework's own vehicle table; turn on `Config.Debug` to see a missing
+table or column, then edit the query in `bridge/garage/` (or use `garage/custom.lua`). Garage names and waypoints come
+from `Config.Vehicles.garages`, keyed by the id your garage script stores.
 
 ## Other
 

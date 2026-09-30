@@ -17,8 +17,21 @@ you can edit them.
 - **Service numbers**: 911 / 311 style numbers that ring a job's phones at once or in turn, text requests
   responders answer in the Services app, and alerts in your dispatch script.
 - **Apps**: App Store, Phone, Messages, Contacts, Settings, Calendar, Calculator, Notes, Clock (alarms, timer,
-  stopwatch), Mail (with buttons scripts can add), Ads, Maps (the game's own map), Wallet (pay other numbers), Camera
-  and Photos, Music (with a speaker nearby players hear), Dark Chat, and Snake on the flip phone.
+  stopwatch), Mail (with buttons scripts can add), Ads, Maps (the game's own map), Camera and Photos, Music (with a
+  speaker nearby players hear), Dark Chat, and Snake on the flip phone.
+- **Chirp and Lens**: a public text feed and a public photo feed on one set of accounts. Handles and passwords (log
+  in on any phone, stay logged in until you log out), follows, likes, replies and comments, reposts and quotes,
+  @mentions, #hashtags and trending tags, notifications, verified badges, and moderation: reports to a Discord
+  webhook, deleting posts, suspending accounts, a blocked-words list.
+- **Marketplace**: listings with up to four photos, categories, search, saved listings, mark as sold; buyers message
+  or call the seller.
+- **Bank**: balance and history, paying any number, asking a number for money (they pay or decline in their app), and
+  the job's own account for its bosses (deposit, withdraw, activity) through your banking script.
+- **Garage**: the character's vehicles, out, stored or impounded, with fuel and damage, and a waypoint to the
+  vehicle, its garage or the impound. Reads jg-advancedgarages, cd_garage or your framework's vehicle table
+  (qb-garages, qbx_garages, esx_garage), through an open bridge you can edit.
+- **News**: articles from the jobs you choose, with a cover photo; breaking news notifies every phone with the app.
+  Scripts publish with an export.
 - **Battery** that drains with use and charges in vehicles.
 - **First-boot setup**: language, owner name, phone name and passcode, readable by other scripts.
 - **Your own apps**: add a smartphone app from any resource with `RegisterApp` and the small App SDK.
@@ -32,8 +45,8 @@ you can edit them.
 - One of the supported frameworks, or standalone
 
 Optional: an inventory for phone items, pma-voice or saltychat for call audio, an image host such as Fivemanage for
-the Camera (the phone takes the photos itself; no screenshot resource needed), ox_lib for notifications, a dispatch or
-banking script from the supported lists.
+the Camera and for photos in Chirp, Lens, Marketplace and News (the phone takes the photos itself; no screenshot
+resource needed), ox_lib for notifications, a dispatch, banking or garage script from the supported lists.
 
 ## Install
 
@@ -54,8 +67,10 @@ Details, item snippets for every inventory and photo upload setup: install/READM
   side of the screen to carry it to the next page.
 - Too big or too small for your screen? Settings > Phone size (smartphone: under Display). It's saved on your own
   computer and used for every phone you carry.
-- Admins (`add_ace group.admin tml_phone.admin allow`): `/phonebattery <0-100> [id]`, remove anyone's ad, add songs
-  everyone gets in Music.
+- Admins (`add_ace group.admin tml_phone.admin allow`): `/phonebattery <0-100> [id]`, remove anyone's ad or
+  listing, add songs everyone gets in Music, moderate Chirp and Lens (delete posts, suspend accounts, verified
+  badges), take down news articles.
+- News writers: the jobs in `Config.News.jobs` (default: `reporter`), or anyone with `tml_phone.news`.
 
 ## Documentation
 

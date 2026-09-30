@@ -14,8 +14,9 @@ the server console and uses the default below, so a typo never breaks the phone.
   [Service numbers](#service-numbers)
 - [Smartphone apps](#smartphone-apps) · [Themes](#themes) · [Designs](#designs) · [Flashlight](#flashlight) ·
   [Battery](#battery)
-- [Notes](#notes) · [Clock](#clock) · [Mail](#mail) · [Ads](#ads) · [Maps](#maps) · [Wallet](#wallet) ·
-  [Camera and Photos](#camera-and-photos) · [Music](#music) · [Dark Chat](#dark-chat) · [Calendar](#calendar)
+- [Notes](#notes) · [Clock](#clock) · [Mail](#mail) · [Ads](#ads) · [Maps](#maps) · [Bank](#bank) ·
+  [Camera and Photos](#camera-and-photos) · [Music](#music) · [Dark Chat](#dark-chat) · [Chirp and Lens](#chirp-and-lens) ·
+  [Marketplace](#marketplace) · [News](#news) · [Garage](#garage) · [Calendar](#calendar)
 - [Sounds and ringtones](#sounds-and-ringtones) · [Animations](#animations) · [Rate limits](#rate-limits) ·
   [Server-only settings](#server-only-settings-configserverlua) · [Colours of the flip phone](#colours-of-the-flip-phone)
 
@@ -39,9 +40,10 @@ the server console and uses the default below, so a typo never breaks the phone.
 | `Config.Notify` | `'auto'` | `'ox_lib'` `'qbcore'` `'esx'` `'standalone'` `'custom'` |
 | `Config.Voice` | `'auto'` | `'pma-voice'` `'saltychat'` `'none'` `'custom'`: carries the audio of calls |
 | `Config.Dispatch` | `'auto'` | `'ps-dispatch'` `'cd_dispatch'` `'core_dispatch'` `'standalone'` `'custom'`: alerts from service texts |
-| `Config.Banking` | `'auto'` | `'renewed-banking'` `'okokBanking'` `'qs-banking'` `'fd_banking'` `'tgg-banking'` `'snipe-banking'` `'pefcl'` `'qb-banking'` `'esx_banking'` `'framework'` `'custom'`: where Wallet payments show up as statements |
+| `Config.Banking` | `'auto'` | `'renewed-banking'` `'okokBanking'` `'qs-banking'` `'fd_banking'` `'tgg-banking'` `'snipe-banking'` `'pefcl'` `'qb-banking'` `'esx_banking'` `'framework'` `'custom'`: where Bank payments show up as statements, and where job accounts live |
 | `Config.Uploads` | `'auto'` | `'fivemanage'` `'none'` `'custom'`: where Camera photos are stored (keys in `config/server.lua`). `'auto'` = `'fivemanage'`, ready once its key is set |
 | `Config.Speaker` | `'auto'` | `'builtin'` `'xsound'` `'none'` `'custom'`: Music played out loud to players nearby. `'auto'` = `'builtin'` (needs no other script); `'none'` = only the holder hears it |
+| `Config.Garage` | `'auto'` | `'jg-advancedgarages'` `'cd_garage'` `'framework'` `'none'` `'custom'`: where the Garage app reads a character's vehicles. `'framework'` = the framework's own vehicle table, which qb-garages, qbx_garages and esx_garage use |
 
 The framework adapters refuse a payment the player can't afford, even on frameworks whose bank balance may go
 negative (QBCore, Qbox, ND_Core).
@@ -236,11 +238,16 @@ phones are not affected.
 | `services` | enabled | call or text service numbers; responders answer requests here |
 | `ads` | enabled | classifieds board |
 | `maps` | enabled | the game's map, saved places, sharing locations |
-| `wallet` | enabled | bank balance and paying other numbers |
+| `wallet` | enabled | the Bank app: balance, paying and requesting money, the job's account |
 | `camera` | enabled, preinstalled | needs an image host (`Config.Uploads`) |
 | `photos` | enabled, preinstalled | the gallery; share photos in messages |
 | `music` | enabled, preinstalled | curated songs and links players add |
 | `darkchat` | enabled | anonymous channels with handles |
+| `chirp` | enabled | public text feed |
+| `lens` | enabled | public photo feed (same accounts as Chirp) |
+| `market` | enabled | Marketplace: listings with photos |
+| `garage` | enabled | your vehicles and a waypoint to them |
+| `news` | enabled | articles from reporters, breaking news |
 
 ## Themes
 
@@ -371,21 +378,33 @@ style) show through. Public places are shown to everyone.
 | `Config.Maps.labelLength` | `40` | characters in a place name |
 | `Config.Maps.places` | hospital, police stations, City Hall, Legion Square, Fleeca, LS Customs | `{ label, x, y, icon }`. Icons: `'medical'` `'shield'` `'wrench'` `'bank'` `'fuel'` `'food'` `'bag'` `'building'` `'star'` |
 
-## Wallet
+## Bank
 
-The bank balance, and paying another phone number. The money goes to whoever carries that phone right now (they must
-be online). Payments also show up in your banking script (`Config.Banking`).
+The Bank app replaced the Wallet app in 1.1.0 and keeps its settings (`Config.Apps.wallet`, `Config.Wallet`), so
+existing configs work unchanged. It shows the bank balance, pays another phone number, asks a number for money, and
+gives a job's bosses that job's own account. Money goes to whoever carries the other phone right now (they must be
+online). Payments also show up in your banking script (`Config.Banking`).
 
 | Option | Default | Meaning |
 |---|---|---|
 | `Config.Wallet.account` | `'bank'` | framework account payments come from and go to |
 | `Config.Wallet.currency` | `'$'` | shown before amounts |
 | `Config.Wallet.showCash` | `true` | also show the cash the character carries |
-| `Config.Wallet.minAmount` | `1` | smallest payment |
-| `Config.Wallet.maxAmount` | `100000` | largest single payment |
-| `Config.Wallet.perMinute` | `5` | payments one phone may send per minute |
+| `Config.Wallet.minAmount` | `1` | smallest payment or request |
+| `Config.Wallet.maxAmount` | `100000` | largest single payment or request |
+| `Config.Wallet.perMinute` | `5` | payments and requests one phone may send per minute |
 | `Config.Wallet.noteLength` | `60` | characters in a payment note |
-| `Config.Wallet.keepDays` | `30` | older history is removed |
+| `Config.Wallet.keepDays` | `30` | older history (and business activity) is removed |
+| `Config.Wallet.requests` | `true` | players can ask a number for money; the other side pays or declines in their Bank app |
+| `Config.Wallet.requestHours` | `24` | an unanswered request is removed after this many hours |
+| `Config.Wallet.maxRequests` | `10` | unanswered requests one phone can have out at once |
+| `Config.Wallet.business.enabled` | `true` | show "Business" to the players listed below |
+| `Config.Wallet.business.jobs` | `{ police = 4, ambulance = 4, mechanic = 4 }` | job name = lowest grade that may use that job's account: see its balance and activity, deposit from their own account, withdraw to it |
+
+A job's account is the job name in your banking script (`Config.Banking`). Renewed-Banking, qb-banking, okokBanking,
+qs-banking, fd_banking, tgg-banking, snipe-banking and pefcl keep job accounts; with `'framework'`, ESX society
+accounts (`esx_addonaccount`) are used. When the banking script has no account for a job, the Business page says it
+isn't available.
 
 ## Camera and Photos
 
@@ -447,6 +466,84 @@ Anonymous channels. Messages show the handle a player picks, never their number.
 | `Config.DarkChat.historyPerChannel` | `200` | messages kept per channel |
 | `Config.DarkChat.keepDays` | `14` | older messages are removed |
 
+## Chirp and Lens
+
+A public text feed (Chirp) and a public photo feed (Lens) on one set of accounts. An account is a handle and a
+password, not a phone: players log in on any phone, and a phone stays logged in until someone logs out in the app. A
+lost or stolen phone that's still logged in can post as its owner; changing the password logs every other phone out.
+Follows work in both apps. Photos come from the phone's gallery (Camera, Photos); the gallery picker works without the
+Photos app installed.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `Config.Social.handleLength` | `16` | longest handle (at least 3; letters, numbers, `_` and `.`) |
+| `Config.Social.nameLength` | `30` | characters in a display name |
+| `Config.Social.bioLength` | `160` | characters in a profile bio |
+| `Config.Social.postLength` | `280` | characters in a post, caption, reply or comment |
+| `Config.Social.maxMedia` | `4` | photos in one post (1-4) |
+| `Config.Social.accountsPerCharacter` | `3` | accounts one character can create (`0` = no limit) |
+| `Config.Social.accountsPerPhone` | `5` | accounts one phone can stay logged in to (players switch between them) |
+| `Config.Social.perMinute` | `6` | posts, replies and comments one account may send per minute |
+| `Config.Social.pageSize` | `20` | posts loaded at a time |
+| `Config.Social.keepDays` | `0` | posts older than this are deleted (`0` = kept forever) |
+| `Config.Social.notifyLikes` | `true` | tell authors about likes (replies, mentions, follows, reposts and quotes always notify) |
+| `Config.Social.blockedWords` | `{}` | posts, names and bios containing one of these are refused (any case) |
+| `Config.Social.moderatorAce` | `'tml_phone.admin'` | ACE that may delete any post, suspend accounts and give the verified badge (in the app: a post's "…" menu, a profile's "…" menu) |
+
+Players can report a post (spam, abuse, something else). Reports go to a Discord webhook if you set one in
+`config/server.lua` (`ServerConfig.Social`). A suspended account's posts are hidden, and it can't log in or post.
+
+## Marketplace
+
+Listings with photos and a price. Buyers call or text the seller's number; money and items change hands in person.
+Listings expire, and sellers can mark them sold: they leave the public list but stay in the seller's own list and in
+buyers' saved ones. Ads stays the text board for services, jobs and events.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `Config.Marketplace.titleLength` | `50` | characters in a title |
+| `Config.Marketplace.bodyLength` | `1000` | characters in the description |
+| `Config.Marketplace.maxPhotos` | `4` | photos per listing (0-8; `0` = text only) |
+| `Config.Marketplace.maxPrice` | `10000000` | highest price |
+| `Config.Marketplace.currency` | `'$'` | shown before prices |
+| `Config.Marketplace.maxActive` | `5` | listings one phone can have up at once (sold ones don't count) |
+| `Config.Marketplace.expireDays` | `7` | whole days a listing stays up |
+| `Config.Marketplace.cooldownSeconds` | `60` | wait between two listings from one phone |
+| `Config.Marketplace.showName` | `true` | show the seller's character name |
+| `Config.Marketplace.moderatorAce` | `'tml_phone.admin'` | ACE that may take down anyone's listing |
+| `Config.Marketplace.categories` | Vehicles, Property, Electronics, Fashion, Tools, Other | `{ id, label, icon }`; the first is preselected when listing |
+
+## News
+
+Articles everyone with the app can read, written by the jobs you list (or anyone with `publisherAce`). A writer can
+send an article out as breaking news: every smartphone with News installed gets a notification. Writers edit and take
+down their own articles. Scripts publish with `PublishNews` (docs/API.md).
+
+| Option | Default | Meaning |
+|---|---|---|
+| `Config.News.jobs` | `{ reporter = 0 }` | job name = lowest grade that may write articles |
+| `Config.News.onDutyOnly` | `false` | writers must be on duty |
+| `Config.News.publisherAce` | `'tml_phone.news'` | ACE that may write whatever their job (`''` = jobs only) |
+| `Config.News.moderatorAce` | `'tml_phone.admin'` | ACE that may take down any article |
+| `Config.News.titleLength` | `80` | characters in a headline |
+| `Config.News.bodyLength` | `5000` | characters in an article |
+| `Config.News.breaking` | `true` | writers can send an article out as breaking news |
+| `Config.News.breakingCooldown` | `300` | seconds between two breaking news alerts from one writer |
+| `Config.News.pageSize` | `20` | articles loaded at a time |
+| `Config.News.keepDays` | `30` | older articles are deleted |
+
+## Garage
+
+The character's vehicles: whether each is out, in a garage or impounded, fuel and damage when your garage script keeps
+them, and a waypoint to the vehicle (when it's out), its garage or the impound lot. Vehicles are read through
+`Config.Garage` (bridge/garage/); vehicle names come from the player's own game.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `Config.Vehicles.locate` | `true` | vehicles that are out show where they are now, and players can set a waypoint to them |
+| `Config.Vehicles.garages` | four examples | garage id = `{ label, x, y }`: the name and place of each garage, keyed by the id your garage script stores. Ids missing here show as that id, with no waypoint |
+| `Config.Vehicles.impound` | `{ label = 'Impound Lot', x = 409.2, y = -1623.1 }` | where impounded vehicles are collected (`false` = no waypoint) |
+
 ## Calendar
 
 Reminders also reach flip phones as a notification. Scripts can add events for one player, a number, a job or
@@ -503,7 +600,7 @@ while it's up.
 | `signal` | `100` | video call connection messages |
 | `share` | `5000` | sharing your number with players nearby |
 | `photo` | `2500` | taking a photo |
-| `pay` | `1500` | Wallet payments |
+| `pay` | `1500` | Bank payments, requests and business deposits / withdrawals |
 
 ## Server-only settings (`config/server.lua`)
 
@@ -515,6 +612,8 @@ A server script, never sent to players. Put keys here, not in `config/config.lua
 | `ServerConfig.Uploads.fivemanage.url` | `'https://api.fivemanage.com/api/v3/file'` | upload endpoint |
 | `ServerConfig.Uploads.custom` | `{ url = '', field = 'file', headers = {}, responseUrl = 'url' }` | any host that takes a multipart upload and replies with JSON; see `bridge/uploads/README.md` |
 | `ServerConfig.Uploads.allowedHosts` | `{ 'fivemanage.com' }` | camera photos are only accepted from these hosts (and subdomains). Add your custom host here |
+| `ServerConfig.Social.webhook` | convar `tml_phone_social_webhook` | a Discord webhook URL for Chirp and Lens reports (the post, its author, who reported it and why). Empty = off. Easiest in server.cfg: `set tml_phone_social_webhook "https://discord.com/api/webhooks/..."` |
+| `ServerConfig.Social.logPosts` | `false` | also send every new post and comment to the webhook |
 
 ## Colours of the flip phone
 
