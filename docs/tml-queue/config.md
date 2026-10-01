@@ -80,7 +80,7 @@ Timed priority from the database (`queue_addprio` or the `AddPriority` export) w
 | `serverName` | Shown at the top of the card |
 | `logo` | `https` URL of a square logo, `''` for none |
 | `buttons` | Up to 3 `{ label, url }` link buttons |
-| `tips` | Strings; one is shown at random each refresh |
+| `tips` | Strings; shown one at a time, changing every 15 seconds |
 
 ## `Config.Commands`
 
