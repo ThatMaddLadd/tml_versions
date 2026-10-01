@@ -177,6 +177,22 @@ can, which means each can see the other's IP address, as in most voice and video
 server, run a TURN server (for example [coturn](https://github.com/coturn/coturn)), add it to `videoIce` and set
 `videoRelayOnly = true`. Some players behind strict routers also need TURN to see video at all.
 
+## Call voice effect
+
+How the other person sounds on a call. pma-voice only (SaltyChat adds its own effect), and it needs
+`setr voice_useNativeAudio true` and `setr voice_enableSubmix 1` in your voice config. pma-voice's own call sound has
+no filter at all, so without this calls sound like the person is standing next to you.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `Config.VoiceEffect.enabled` | `true` | use the effect; `false` = pma-voice's own (clean) call sound |
+| `Config.VoiceEffect.preset` | `'phone'` | a key in `presets`: `phone` (clean phone line), `cellular` (a bit of grit), `landline` (older, narrower) |
+| `Config.VoiceEffect.volume` | `1.0` | 0.0-1.0, loudness of the other side through the effect |
+| `Config.VoiceEffect.presets` | see config | your own presets: `freq_low` / `freq_hi` (the band of the voice that gets through, Hz), `o_freq_lo` / `o_freq_hi` (the output band), `fudge` (distortion), `rm_mix` (crackle), `rm_mod_freq` (ring modulation, robotic; 0 = off) |
+
+Change a value and restart the resource to hear it. A preset with a missing or non-number value turns the effect off
+with a console warning.
+
 ## Service numbers
 
 `Config.Services` is a list. Calling a service number rings the listed jobs' phones; texting it opens a request those

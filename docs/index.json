@@ -68,6 +68,75 @@
           "title": "FAQ"
         }
       ]
+    },
+    {
+      "slug": "tml-radio",
+      "name": "TML Radio",
+      "summary": "A handheld two-way radio for FiveM. Tune by keypad, channel buttons or presets. Emergency services get locked frequency ranges with a member list, callsigns and a panic button.",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
+        }
+      ]
+    },
+    {
+      "slug": "tml-billing",
+      "name": "TML Billing",
+      "summary": "Invoices and fines for FiveM.",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
+        }
+      ]
+    },
+    {
+      "slug": "tml-queue",
+      "name": "TML Queue",
+      "summary": "A connection queue for FiveM. When the server is full, players wait in line on a live queue card that shows their position, priority, time waited and an estimated wait.",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
+        }
+      ]
     }
   ]
 }
