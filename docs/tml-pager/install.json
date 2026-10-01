@@ -1,0 +1,8 @@
+{
+  "files": {
+    "esx.sql": "-- ESX (items table based inventories)\nINSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES ('tml_pager', 'Pager', 1, 0, 1)\nON DUPLICATE KEY UPDATE `label` = VALUES(`label`);\n",
+    "ox_inventory.txt": "-- ox_inventory: add to ox_inventory/data/items.lua\n['tml_pager'] = {\n    label = 'Pager',\n    weight = 150,\n    stack = false,\n    close = true,\n    consume = 0,\n    description = 'Receives dispatch pages.',\n    server = { export = 'tml_pager.use_item' },\n},\n",
+    "qb-inventory.txt": "-- qb-inventory / ps-inventory: add to qb-core/shared/items.lua (Qbox: ox_inventory/qbx_core shared items)\ntml_pager = { name = 'tml_pager', label = 'Pager', weight = 150, type = 'item', image = 'tml_pager.png', unique = true, useable = true, shouldClose = true, description = 'Receives dispatch pages.' },\n",
+    "qs-inventory.txt": "-- qs-inventory: add to qs-inventory/shared/items.lua\n['tml_pager'] = { ['name'] = 'tml_pager', ['label'] = 'Pager', ['weight'] = 150, ['type'] = 'item', ['image'] = 'tml_pager.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = true, ['description'] = 'Receives dispatch pages.' },\n"
+  }
+}

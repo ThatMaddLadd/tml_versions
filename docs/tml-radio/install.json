@@ -1,0 +1,8 @@
+{
+  "files": {
+    "esx.sql": "-- ESX (items table based inventories)\nINSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES ('tml_radio', 'Radio', 1, 0, 1)\nON DUPLICATE KEY UPDATE `label` = VALUES(`label`);\n",
+    "ox_inventory.txt": "-- ox_inventory: add to ox_inventory/data/items.lua\n['tml_radio'] = {\n    label = 'Radio',\n    weight = 300,\n    stack = false,\n    close = true,\n    consume = 0,\n    description = 'A handheld two-way radio.',\n    server = { export = 'tml_radio.use_item' },\n},\n",
+    "qb-inventory.txt": "-- qb-inventory / ps-inventory: add to qb-core/shared/items.lua\ntml_radio = { name = 'tml_radio', label = 'Radio', weight = 300, type = 'item', image = 'tml_radio.png', unique = true, useable = true, shouldClose = true, description = 'A handheld two-way radio.' },\n",
+    "qs-inventory.txt": "-- qs-inventory: add to qs-inventory/shared/items.lua\n['tml_radio'] = { ['name'] = 'tml_radio', ['label'] = 'Radio', ['weight'] = 300, ['type'] = 'item', ['image'] = 'tml_radio.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = true, ['description'] = 'A handheld two-way radio.' },\n"
+  }
+}

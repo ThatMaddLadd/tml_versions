@@ -12,6 +12,10 @@
           "title": "Overview"
         },
         {
+          "id": "install",
+          "title": "Install"
+        },
+        {
           "id": "config",
           "title": "Configuration"
         },
@@ -35,6 +39,10 @@
         {
           "id": "overview",
           "title": "Overview"
+        },
+        {
+          "id": "install",
+          "title": "Install"
         },
         {
           "id": "config",
@@ -62,6 +70,10 @@
           "title": "Overview"
         },
         {
+          "id": "install",
+          "title": "Install"
+        },
+        {
           "id": "config",
           "title": "Configuration"
         },
@@ -85,6 +97,10 @@
         {
           "id": "overview",
           "title": "Overview"
+        },
+        {
+          "id": "install",
+          "title": "Install"
         },
         {
           "id": "config",
@@ -112,6 +128,10 @@
           "title": "Overview"
         },
         {
+          "id": "install",
+          "title": "Install"
+        },
+        {
           "id": "config",
           "title": "Configuration"
         },
@@ -135,6 +155,10 @@
         {
           "id": "overview",
           "title": "Overview"
+        },
+        {
+          "id": "install",
+          "title": "Install"
         },
         {
           "id": "config",
