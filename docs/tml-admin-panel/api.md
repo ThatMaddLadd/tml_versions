@@ -46,6 +46,19 @@ Returns the saved row (`id`, `url`, `targetCharId`, `targetName`, `metadata`), o
 
 Triggered by the panel for your own scripts to listen to. They are not net events, so clients cannot fire them.
 
+### `tml_adminpanel:actionLogged`
+
+`(adminSource, action, targetName, details, targetId)`. Fired for every staff action the panel writes to its own
+action log (kick, ban, warn, money, groups, teleports, vehicles, screenshots...). `adminSource` is the staff member's
+server id, `action` the log's action name (for example `ban`, `money_cash`, `toggle_noclip`), `targetId` the target's
+account or character id when there is one. TML Monitor listens to this to show panel actions on its dashboard.
+
+```lua
+AddEventHandler('tml_adminpanel:actionLogged', function(adminSource, action, targetName, details)
+  print(('%s used %s on %s: %s'):format(GetPlayerName(adminSource), action, targetName or '-', details or ''))
+end)
+```
+
 ### `tml_adminpanel:characterRenamed`
 
 `(charId, firstName, lastName, source)`. Fired after a staff member renames a character. `source` is the player's server
