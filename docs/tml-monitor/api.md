@@ -51,6 +51,57 @@ page, or give them an ACE from `Config.AntiCheat.exemptAces` (`add_ace group.mod
 For scripts you can't or don't want to edit: allow the teleport route on the dashboard (open the teleport flag, then
 *Allow this route*), or list an event the script already sends in `Config.AntiCheat.graceEvents`.
 
+## exports.tml_monitor:allow (server)
+
+```lua
+exports.tml_monitor:allow(source, kind, seconds)
+```
+
+Lets one player do something that would otherwise be flagged, for a while: an arena or paintball script giving out
+weapons that aren't inventory items, a game mode making players invincible, a minigame moving them. `seconds` defaults
+to 10 and is capped at 3600. Returns `false` for an unknown kind or a player who isn't online.
+
+| `kind` | Checks it covers |
+| --- | --- |
+| `movement` | speed, teleport, super jump |
+| `godmode` | god mode, health or armour over the maximum |
+| `weapons` | damage, hits with a weapon not held, hit rate, hit distance, weapon not in inventory, banned weapon, infinite ammo |
+| `events` | game event spam, changing another player's weapons, projectiles, particle effects |
+| `explosions` | explosion spam, hidden, boosted and banned explosions |
+| `entities` | spawning too much, banned models |
+| `visibility` | invisible, free camera, night or thermal vision |
+| `all` | every check |
+
+```lua
+-- Paintball: weapons handed out directly, for the length of the round.
+GiveWeaponToPed(GetPlayerPed(src), `WEAPON_PISTOL`, 250, false, true)
+exports.tml_monitor:allow(src, 'weapons', 600)
+```
+
+## exports.tml_monitor:addZone / removeZone (server)
+
+```lua
+exports.tml_monitor:addZone(id, coords, radius)
+exports.tml_monitor:removeZone(id)
+```
+
+An allowed area from a script, like the dashboard's *Allow this area*: the movement checks (speed, teleport, super
+jump) don't run inside it. For areas that only exist while something is on, such as an event arena. `radius` is 5 to
+1000 metres; adding with an existing `id` replaces it. Areas from scripts are forgotten when tml_monitor restarts.
+Returns `false` for bad arguments, or (`removeZone`) an unknown id.
+
+```lua
+exports.tml_monitor:addZone('derby', vector3(-1234.5, -2345.6, 13.9), 120)
+-- ...when the event ends:
+exports.tml_monitor:removeZone('derby')
+```
+
+## Console command
+
+`tml_monitor` in the server console (or for anyone with `add_ace group.admin command.tml_monitor allow`) prints the
+version and where data goes, whether the dashboard is accepting it and what's waiting, the adapters in use, whether
+the anti-cheat is on (and in test mode), and the device ID, fingerprint and screenshot settings.
+
 ## Built-in categories
 
 | Category | Actions | Config |
@@ -66,5 +117,5 @@ For scripts you can't or don't want to edit: allow the teleport route on the das
 | `vehicle` | `enter`, `leave` (`_passenger` when enabled) | `Config.Logs.vehicles`, `Config.Logs.vehiclePassengers` |
 | `admin` | `kick`, `ban`, `warn`, `heal`, `spawn_vehicle`, `teleport_to`, `bring`, `spectate`, `set_*`, ... (tagged with the menu) | `Config.Logs.admin` |
 | `chat` | `message` | `Config.Logs.chat` (off by default) |
-| `anticheat` | `speed`, `teleport`, `super_jump`, `god_mode`, `health`, `damage`, `explosion_spam`, `explosion_hidden`, `entity_spam`, `shared_ids` | `Config.AntiCheat` (needs OneSync); `shared_ids` comes from the TML Monitor service |
+| `anticheat` | `speed`, `teleport`, `super_jump`, `god_mode`, `health`, `damage`, `explosion_spam`, `explosion_hidden`, `entity_spam`, `event_spam`, `weapon_other`, `projectile`, `particle`, `client_silent`, `weapon_mismatch`, `hit_rate`, `hit_distance`, `weapon_spawned`, `weapon_banned`, `explosion_boosted`, `explosion_banned`, `entity_banned`, `event_watch`, `nui_devtools`, `resource_injected`, `infinite_ammo`, `invisible`, `freecam`, `vision`, `shared_ids`, `ocr_match` | `Config.AntiCheat` (needs OneSync); `shared_ids` and `ocr_match` come from the TML Monitor service. Flags with `client = true` were reported by the player's game. Alert flags may carry `shot`, a screenshot's id |
 | `resource` | `monitor_start`, `monitor_stop` | always on |
