@@ -35,6 +35,10 @@ Optional convar for testing against a local dev service: `set tml_monitor_url "h
   megabytes; nothing about other programs on the machine.
 - Every 15 s: who is online (server id, name, ping, FPS, time online) for the dashboard's live list, plus median and
   95th-percentile ping and median and low-end FPS.
+- Once connected, and again when one starts, stops or changes: the server's resources, with their versions and
+  whether they're started.
+- Every 15 s (`Config.Collect.threads`): how busy FXServer's main, network and sync threads are (average time per
+  tick), read from the server's own `/perf/` page on its HTTP port.
 - Every 30 s from each player: their average FPS and slowest 5 s window (`Config.Collect.clientFps`). The client
   counts frames on a 5 s timer, never per frame.
 - Connects, joins and drops: the player's name, their identifiers (license, Discord, FiveM, Steam...) and the drop
