@@ -61,8 +61,9 @@ Optional convar for testing against a local dev service: `set tml_monitor_url "h
   agent, language, time zone, screen size, CPU threads, memory, graphics card name and how it draws a test image.
   The values are joined and hashed with your server's salt on your server; only the hash is sent. Same purpose as
   the device ID, but it survives clearing the game's cache.
-- Screenshots (`Config.AntiCheat.screenshots`, needs screenshot-basic): when a player gets an alert-level flag, a
-  JPEG of their screen, at most one per player every 5 minutes. Kept with the flag for 30 days, then deleted. The
+- Screenshots (`Config.AntiCheat.screenshots`): when a player gets an alert-level flag, a JPEG of their screen, at
+  most one per player every 5 minutes. The player's game uploads it straight to TML Monitor with a one-time address
+  your server signs, so it never passes through your server. Kept with the flag for 30 days, then deleted. The
   service reads the text on it to spot cheat menus.
 - The names of the resources running in each player's game, compared on your server with the ones it runs; only
   unknown names are sent, with a flag.
@@ -140,9 +141,11 @@ the wrong arguments. It never changes what your script does.
 **Banned models and explosion types.** `entities.bannedModels` (props menus troll with) and
 `explosions.bannedTypes` are flagged the moment one appears.
 
-**Screenshots.** With screenshot-basic running, every alert-level flag gets a screenshot of the player's screen (at
-most one per player every `screenshots.everySeconds`). It shows in the flag on the dashboard, and the service reads
-the text on it: a known cheat menu's name becomes its own flag.
+**Screenshots.** Every alert-level flag gets a screenshot of the player's screen (at most one per player every
+`screenshots.everySeconds`), taken by tml_monitor itself: no screenshot resource needed. It shows in the flag on the
+dashboard, and the service reads the text on it: a known cheat menu's name becomes its own flag. The player's game
+uploads it directly, so a screenshot costs your server almost nothing, whatever its size. No screenshot method can
+see a cheat menu drawn outside the game's own picture.
 
 **Scripts that do these things on purpose** can say so for one player at a time with
 `exports.tml_monitor:allow(source, kind, seconds)`, and add allowed areas with `exports.tml_monitor:addZone`
