@@ -145,7 +145,7 @@ most once per check per `cooldownSeconds`; the next log says how many more times
 
 Positions and the weapon in each player's hands are checked once a second per player, spread across ticks in small
 groups. A weapon that isn't in the player's inventory is only flagged if it's still in their hands 4 seconds later,
-and only with an inventory adapter that can tell (`HasWeapon` in `bridge/README.md`; ox_inventory can).
+and only with an inventory adapter that can tell (`HasWeapon` in `bridge/README.md`: ox_inventory, qb-inventory, ps-inventory, qs-inventory and core_inventory).
 
 **Reported by the player's game.** A few checks can only run in the game itself. A cheat can hide them, so their
 flags say *reported by the player's game*, count for less in the risk score, and are checked again on the server
@@ -187,9 +187,10 @@ to players in *Who's online*.
 - **One extra global, `Monitor`:** the server files share state through it. `Config` and `L` are the usual globals.
 - **A read-only, server-only bridge:** TML Monitor never gives or takes anything, so its framework contract is
   `GetCharacter`, `GetJob`, `GetMoney` plus money and job events instead of the full STANDARDS contract, and there
-  are no target/notify/banking categories. Framework adapters: Qbox, QBCore, ESX, standalone, custom. Inventory:
-  ox_inventory, standalone, custom (other inventories log through the export until they get an adapter). See
-  `bridge/README.md`.
+  are no target/notify/banking categories. Framework adapters: Qbox, QBCore, ESX, ox_core, ND_Core, vRP 1.x, standalone,
+  custom. Inventory: ox_inventory, qb-inventory, ps-inventory, standalone, custom, plus qs-inventory and
+  core_inventory for the weapon check only (they document no item events, so their items log through the export).
+  See `bridge/README.md`.
 - **No NUI:** the only client script is the FPS sampler; everything players could see lives on the dashboard.
 - **One per-tick loop (`Wait(0)`) on the server:** frame timing has to be measured every tick. A timer that
   wakes every N ms can only see lag in whole ticks, which made every healthy server read ~50 ms late. The loop only
