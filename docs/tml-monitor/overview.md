@@ -12,7 +12,17 @@ drops with reasons and play time.
    set tml_monitor_key "tmk_..."
    ```
 
-3. Restart. The console prints `Connected to TML Monitor as "<your server>"`.
+3. For the dashboard's **Profile now** button and automatic profiles (Analytics → Performance), let the resource run
+   FXServer's profiler, also in `server.cfg`:
+
+   ```
+   add_ace resource.tml_monitor command.profiler allow
+   add_ace resource.tml_monitor command.record allow
+   add_ace resource.tml_monitor command.saveJSON allow
+   ```
+
+   Without it everything else works; the console says once that profiles are off.
+4. Restart. The console prints `Connected to TML Monitor as "<your server>"`.
 
 No SQL and no items: nothing is stored in your database.
 
@@ -21,6 +31,10 @@ No SQL and no items: nothing is stored in your database.
 `config/config.lua` (open): how often data is sent, the offline buffer size and age, how often stats are measured,
 and which collectors are on. Every option has its type and default beside it; bad values print a warning and fall
 back to the default.
+
+`Config.Performance`: profiles (on request from the dashboard, and by themselves when the server hitches badly: two
+stats windows in a row at `autoHitches` a minute or more, at most once every `autoCooldownMinutes`), how many frames
+each records, and whether script errors are sent.
 
 `Config.Debug = true` also prints a self-check every minute: average server time per frame, the per-tick loop's
 cost, the stats pass's cost, and batches sent and waiting. It times the resource's own code (CfxLua `os.nanotime`).
@@ -71,6 +85,13 @@ Optional convar for testing against a local dev service: `set tml_monitor_url "h
   service reads the text on it to spot cheat menus.
 - The names of the resources running in each player's game, compared on your server with the ones it runs; only
   unknown names are sent, with a flag.
+- Script errors (`Config.Performance.scriptErrors`): each `SCRIPT ERROR` line in the server console, with the resource
+  it names. The same error again within a minute is counted, not sent again, and at most 30 a minute are sent.
+- Profiles (`Config.Performance.profiles`), when the dashboard asks for one or the server hitches badly: FXServer's
+  profiler records a few seconds of server frames into a file in the resource's folder; the resource adds up the time
+  each resource took, deletes the file and sends only those totals (resource name, time, longest single call, calls).
+- When an item is given to another player: the character it went to, so the dashboard can tell items moved to
+  someone's other character.
 - Monitor start and stop.
 
 Data goes out in batches every 5 s. Each batch is saved in resource KVP first and deleted once the API confirms it, so
