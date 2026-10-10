@@ -1,7 +1,7 @@
 Invoices and fines for FiveM. Businesses bill nearby players with itemised invoices, players pay or decline them in a
 clean billing window, and the money is split between the business account, the employee's commission and tax.
 
-Works with Qbox, QBCore, ESX, ox_core, ND_Core, vRP and standalone, and records payments in Renewed-Banking,
+Works with Qbox, QBCore, ESX, ox_core, ND_Core, vRP and standalone, and records payments in TML Banking, Renewed-Banking,
 okokBanking, qs-banking, fd_banking, tgg-banking, snipe-banking, pefcl, qb-banking or esx_banking. The adapters are in
 `bridge/` and aren't escrowed, so you can edit them.
 
@@ -54,7 +54,7 @@ Everything is in `config/config.lua`, commented per option. See [the config refe
 ## Known limitations
 
 - With the `framework` banking adapter (no supported banking script), shared business accounts are only available on
-  ESX (esx_addonaccount). On QBCore and Qbox use Renewed-Banking or qb-banking, or fill in `bridge/banking/custom.lua`.
+  ESX (esx_addonaccount). On QBCore and Qbox use TML Banking, Renewed-Banking or qb-banking, or fill in `bridge/banking/custom.lua`.
 - The nd_core and vrp framework adapters and the banking adapters are written from those projects' docs and haven't
   all been checked on a live server. The adapter files are open, so they can be adjusted if your setup differs.
 

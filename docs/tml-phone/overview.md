@@ -26,7 +26,8 @@ you can edit them.
 - **Marketplace**: listings with up to four photos, categories, search, saved listings, mark as sold; buyers message
   or call the seller.
 - **Bank**: balance and history, paying any number, asking a number for money (they pay or decline in their app), and
-  the job's own account for its bosses (deposit, withdraw, activity) through your banking script.
+  the job's own account for its bosses (deposit, withdraw, activity) through your banking script. With TML Banking
+  running, it also shows every bank account and its history, transfers, bank cards, loans and the credit score.
 - **Garage**: the character's vehicles, out, stored or impounded, with fuel and damage, and a waypoint to the
   vehicle, its garage or the impound. Reads jg-advancedgarages, cd_garage or your framework's vehicle table
   (qb-garages, qbx_garages, esx_garage), through an open bridge you can edit.

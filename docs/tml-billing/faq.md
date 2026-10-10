@@ -1,6 +1,6 @@
 **"The business account could not be found" when paying.**
 The banking bridge couldn't find the shared account named in `Config.Businesses[job].society`. Check the console:
-it prints the account and business. On QBCore/Qbox you need Renewed-Banking or qb-banking (or a custom adapter); on
+it prints the account and business. On QBCore/Qbox you need TML Banking, Renewed-Banking or qb-banking (or a custom adapter); on
 ESX, esx_addonaccount society accounts (`society_mechanic`, written as `mechanic` in the config).
 
 **I can't see the "New invoice" tab options for my job.**

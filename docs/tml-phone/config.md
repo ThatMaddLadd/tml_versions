@@ -40,7 +40,7 @@ the server console and uses the default below, so a typo never breaks the phone.
 | `Config.Notify` | `'auto'` | `'ox_lib'` `'qbcore'` `'esx'` `'standalone'` `'custom'` |
 | `Config.Voice` | `'auto'` | `'pma-voice'` `'saltychat'` `'none'` `'custom'`: carries the audio of calls |
 | `Config.Dispatch` | `'auto'` | `'ps-dispatch'` `'cd_dispatch'` `'core_dispatch'` `'standalone'` `'custom'`: alerts from service texts |
-| `Config.Banking` | `'auto'` | `'renewed-banking'` `'okokBanking'` `'qs-banking'` `'fd_banking'` `'tgg-banking'` `'snipe-banking'` `'pefcl'` `'qb-banking'` `'esx_banking'` `'framework'` `'custom'`: where Bank payments show up as statements, and where job accounts live |
+| `Config.Banking` | `'auto'` | `'tml_banking'` `'renewed-banking'` `'okokBanking'` `'qs-banking'` `'fd_banking'` `'tgg-banking'` `'snipe-banking'` `'pefcl'` `'qb-banking'` `'esx_banking'` `'framework'` `'custom'`: where Bank payments show up as statements, and where job accounts live |
 | `Config.Uploads` | `'auto'` | `'fivemanage'` `'none'` `'custom'`: where Camera photos are stored (keys in `config/server.lua`). `'auto'` = `'fivemanage'`, ready once its key is set |
 | `Config.Speaker` | `'auto'` | `'builtin'` `'xsound'` `'none'` `'custom'`: Music played out loud to players nearby. `'auto'` = `'builtin'` (needs no other script); `'none'` = only the holder hears it |
 | `Config.Garage` | `'auto'` | `'jg-advancedgarages'` `'cd_garage'` `'framework'` `'none'` `'custom'`: where the Garage app reads a character's vehicles. `'framework'` = the framework's own vehicle table, which qb-garages, qbx_garages and esx_garage use |
@@ -414,10 +414,11 @@ online). Payments also show up in your banking script (`Config.Banking`).
 | `Config.Wallet.requests` | `true` | players can ask a number for money; the other side pays or declines in their Bank app |
 | `Config.Wallet.requestHours` | `24` | an unanswered request is removed after this many hours |
 | `Config.Wallet.maxRequests` | `10` | unanswered requests one phone can have out at once |
+| `Config.Wallet.bank` | `true` | with TML Banking running, also show the player's bank accounts, history, transfers, cards, loans and credit score (TML Banking's `Config.Mobile` decides what's allowed) |
 | `Config.Wallet.business.enabled` | `true` | show "Business" to the players listed below |
 | `Config.Wallet.business.jobs` | `{ police = 4, ambulance = 4, mechanic = 4 }` | job name = lowest grade that may use that job's account: see its balance and activity, deposit from their own account, withdraw to it |
 
-A job's account is the job name in your banking script (`Config.Banking`). Renewed-Banking, qb-banking, okokBanking,
+A job's account is the job name in your banking script (`Config.Banking`). TML Banking, Renewed-Banking, qb-banking, okokBanking,
 qs-banking, fd_banking, tgg-banking, snipe-banking and pefcl keep job accounts; with `'framework'`, ESX society
 accounts (`esx_addonaccount`) are used. When the banking script has no account for a job, the Business page says it
 isn't available.

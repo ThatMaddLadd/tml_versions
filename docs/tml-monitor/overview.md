@@ -39,6 +39,8 @@ each records, and whether script errors are sent.
 `Config.Debug = true` also prints a self-check every minute: average server time per frame, the per-tick loop's
 cost, the stats pass's cost, and batches sent and waiting. It times the resource's own code (CfxLua `os.nanotime`).
 
+Optional convar for testing against a local dev service: `set tml_monitor_url "http://127.0.0.1:8090"`.
+
 ## What is sent
 
 - Every 15 s: players online and slots, server frame time (p50 / p95 / max), hitches per minute (frames over

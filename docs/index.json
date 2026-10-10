@@ -33,8 +33,8 @@
       "slug": "tml-admin-panel",
       "name": "TML Admin Panel",
       "summary": "An in-game administration panel for FiveM by ThatMaddLadd.",
-      "version": "3.1.0",
-      "updated": "2026-10-08",
+      "version": "3.1.1",
+      "updated": "2026-10-10",
       "pages": [
         {
           "id": "overview",
@@ -62,8 +62,8 @@
       "slug": "tml-phone",
       "name": "TML Phone",
       "summary": "A flip phone and a smartphone on one shared core. Both run on the same numbers, contacts and messages, so a player can text from a smartphone to a friend's flip phone.",
-      "version": "1.1.5",
-      "updated": "2026-10-01",
+      "version": "1.2.0",
+      "updated": "2026-10-10",
       "pages": [
         {
           "id": "overview",
@@ -120,8 +120,8 @@
       "slug": "tml-billing",
       "name": "TML Billing",
       "summary": "Invoices and fines for FiveM.",
-      "version": "1.0.0",
-      "updated": "2026-10-01",
+      "version": "1.1.0",
+      "updated": "2026-10-10",
       "pages": [
         {
           "id": "overview",
@@ -178,8 +178,8 @@
       "slug": "tml-monitor",
       "name": "TML Monitor",
       "summary": "FiveM resource for TML Monitor. It measures your server and sends the data to the TML Monitor dashboard.",
-      "version": "0.5.0",
-      "updated": "2026-10-09",
+      "version": "0.6.0",
+      "updated": "2026-10-10",
       "pages": [
         {
           "id": "overview",
@@ -188,6 +188,35 @@
         {
           "id": "api",
           "title": "API"
+        }
+      ]
+    },
+    {
+      "slug": "tml-banking",
+      "name": "TML Banking",
+      "summary": "A full bank for FiveM: personal, savings, business, job and gang accounts, bank cards with PINs, loans with a credit score, interest, transfers, statements, an admin panel and Discord logs.",
+      "version": "1.0.0",
+      "updated": "2026-10-10",
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview"
+        },
+        {
+          "id": "install",
+          "title": "Install"
+        },
+        {
+          "id": "config",
+          "title": "Configuration"
+        },
+        {
+          "id": "api",
+          "title": "API"
+        },
+        {
+          "id": "faq",
+          "title": "FAQ"
         }
       ]
     }

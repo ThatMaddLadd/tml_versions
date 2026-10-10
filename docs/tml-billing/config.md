@@ -11,7 +11,7 @@ with a warning.
 | `Config.CheckForUpdates` | `true` | Console notice when a newer version exists |
 | `Config.Framework` | `'auto'` | `qbox` `qbcore` `esx` `ox_core` `nd_core` `vrp` `standalone` `custom` |
 | `Config.Notify` | `'auto'` | `ox_lib` `qbcore` `esx` `standalone` `custom` |
-| `Config.Banking` | `'auto'` | `renewed-banking` `okokBanking` `qs-banking` `fd_banking` `tgg-banking` `snipe-banking` `pefcl` `qb-banking` `esx_banking` `framework` `custom` |
+| `Config.Banking` | `'auto'` | `tml_banking` `renewed-banking` `okokBanking` `qs-banking` `fd_banking` `tgg-banking` `snipe-banking` `pefcl` `qb-banking` `esx_banking` `framework` `custom` |
 
 ## `Config.Billing`
 
