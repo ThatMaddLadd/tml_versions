@@ -95,13 +95,3 @@ See install/README.md.
 Everything is in `config/config.lua`, commented per option. See [the config reference](/docs/tml-banking/config/). Discord webhooks are
 in `config/webhooks.lua` (server only). Text is in `config/locales/`. Colours are CSS variables in `web/theme.css` (or
 `Config.Theme.vars`).
-
-## Known limitations
-
-- tgg-banking can't be imported automatically yet (its database layout isn't published).
-- The nd_core and vrp framework adapters, and some inventory adapters, are written from those projects' docs and
-  haven't all been checked on a live server. The adapter files are open, so they can be adjusted if your setup differs.
-- Personal-account interest for offline characters (`Config.Interest.personalOffline`) reads each offline character
-  from the database once per period.
-
-Update announcements are posted in the Discord.

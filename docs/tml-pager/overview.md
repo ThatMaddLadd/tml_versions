@@ -30,6 +30,3 @@ Everything is in `config/config.lua`, commented per option. Text is in `config/l
 ## Known limitations
 
 - No number-change or "share my number with a nearby player" feature yet.
-- The nd_core, vrp, codem-inventory and core_inventory adapters have not yet been checked on a live server. The adapter files are open, so they can be adjusted if your setup differs.
-
-Update announcements are posted in the Discord.

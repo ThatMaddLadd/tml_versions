@@ -95,5 +95,3 @@ the default is used. The flip phone's colours are CSS variables in `web/theme.cs
 - codem-inventory and core_inventory run in one-number-per-character mode out of the box; their adapters explain how
   to enable per-item phones.
 - Battery levels are saved once a minute, so a change in the last minute before a server stop is lost.
-
-Update announcements are posted in the Discord.

@@ -60,7 +60,3 @@ Everything is in `config/config.lua`, commented per option. See [the config refe
 ## Known limitations
 
 - SaltyChat doesn't report who is talking, so the receiving indicator and talking dots need pma-voice.
-- The nd_core, vrp, codem-inventory and core_inventory adapters are written from those projects' docs and haven't been
-  checked on a live server. The adapter files are open, so they can be adjusted if your setup differs.
-
-Update announcements are posted in the Discord.

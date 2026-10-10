@@ -55,7 +55,4 @@ Everything is in `config/config.lua`, commented per option. See [the config refe
 
 - With the `framework` banking adapter (no supported banking script), shared business accounts are only available on
   ESX (esx_addonaccount). On QBCore and Qbox use TML Banking, Renewed-Banking or qb-banking, or fill in `bridge/banking/custom.lua`.
-- The nd_core and vrp framework adapters and the banking adapters are written from those projects' docs and haven't
-  all been checked on a live server. The adapter files are open, so they can be adjusted if your setup differs.
 
-Update announcements are posted in the Discord.
