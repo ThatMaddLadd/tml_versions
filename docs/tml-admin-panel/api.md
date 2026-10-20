@@ -54,6 +54,57 @@ Freezes (`frozen = true`) or unfreezes an online player, the same freeze as the 
 exports.tml_adminpanel:RemoteFreeze(12, true, 'Richy (TML Monitor)')
 ```
 
+### `RemoteUnbanId(banId, byName) -> boolean, string?`
+
+Lifts an active ban by its number (`12`) or ref (`'BAN-00012'`). Returns `true`, or `false, why`.
+
+```lua
+exports.tml_adminpanel:RemoteUnbanId('BAN-00012', 'Richy (TML Monitor)')
+```
+
+### `RemoteBans(limit) -> table[]`
+
+The active bans, newest first (`limit` defaults to 500, at most 1000). Each is `{ id, ref, name, reason, by,
+banned_at, unban_at, identifier }`; times are unix seconds, `unban_at` is `nil` for a permanent ban and `identifier`
+is the first one stored (a licence when there is one).
+
+```lua
+for _, ban in ipairs(exports.tml_adminpanel:RemoteBans(100)) do print(ban.ref, ban.name, ban.reason) end
+```
+
+### `RemoteKick(targetId, reason, byName) -> boolean, string?`
+
+Kicks an online player. Returns `true`, or `false, why`.
+
+```lua
+exports.tml_adminpanel:RemoteKick(12, 'AFK in a busy spot', 'Richy (TML Monitor)')
+```
+
+### `RemoteWarn(targetId, reason, byName) -> boolean, number|string`
+
+Warns an online player's character. The warning is kept in the panel like one given in game and shown to the player.
+Returns `true` and their warning count, or `false, why`.
+
+```lua
+local ok, count = exports.tml_adminpanel:RemoteWarn(12, 'Fail RP', 'Richy (TML Monitor)')
+```
+
+### `RemoteMedical(targetId, kind, byName) -> boolean, string?`
+
+Revives (`kind = 'revive'`) or heals (`'heal'`) an online player, the same as the panel's buttons.
+
+```lua
+exports.tml_adminpanel:RemoteMedical(12, 'revive', 'Richy (TML Monitor)')
+```
+
+### `RemoteAnnounce(message, byName) -> boolean, string?`
+
+Shows an announcement to everyone, the same as the panel's Announce.
+
+```lua
+exports.tml_adminpanel:RemoteAnnounce('Restart in 10 minutes.', 'Richy (TML Monitor)')
+```
+
 ### `captureScreenshot(targetId, opts) -> table?, string?`
 
 Captures a player's screen and stores it in the evidence gallery. Needs screenshot-basic and the upload key.

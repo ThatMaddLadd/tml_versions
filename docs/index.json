@@ -184,7 +184,7 @@
       "slug": "tml-monitor",
       "name": "TML Monitor",
       "game": "fivem",
-      "summary": "FiveM resource for TML Monitor. It measures your server and sends the data to the TML Monitor dashboard.",
+      "summary": "FiveM and RedM resource for TML Monitor. It measures your server and sends the data to the TML Monitor dashboard.",
       "version": "0.6.0",
       "updated": "2026-10-10",
       "pages": [

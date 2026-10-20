@@ -1,4 +1,4 @@
-FiveM resource for TML Monitor. It measures your server and sends the data to the TML Monitor dashboard. Stage 1
+FiveM and RedM resource for TML Monitor. It measures your server and sends the data to the TML Monitor dashboard. Stage 1
 (0.1.x) collects players online, server frame time and hitches, entity counts (OneSync), and connects, joins and
 drops with reasons and play time.
 
@@ -26,6 +26,20 @@ drops with reasons and play time.
 
 No SQL and no items: nothing is stored in your database.
 
+## RedM
+
+The same resource runs on RedM: install it the same way. Framework adapters for RSG Core (`rsg`) and VORP (`vorp`)
+and inventory adapters for rsg-inventory and vorp_inventory are detected like the FiveM ones. What differs:
+
+- The client checks for freecam, night and thermal vision and infinite ammo are FiveM only (RedM has no such vision
+  modes, and its controls and weapon natives differ). Invisibility, the resource list, the fingerprint and
+  developer-tools checks run on both.
+- Server checks that read plates, vehicle types, armour or the weapon in hand need natives RedM's server doesn't
+  have, so they never fire there. Movement, health, damage and entity checks run on both, with the same thresholds.
+- Weapon names in logs cover RedM's weapons too. VORP keeps weapons apart from items, so its weapon check reads the
+  player's VORP weapons; rsg-inventory has no item events, so log items there with the export.
+- The dashboard shows RedM next to the server's name.
+
 ## Config
 
 `config/config.lua` (open): how often data is sent, the offline buffer size and age, how often stats are measured,
@@ -42,14 +56,26 @@ cost, the stats pass's cost, and batches sent and waiting. It times the resource
 Optional convar for testing against a local dev service: `set tml_monitor_url "http://127.0.0.1:8090"`.
 
 `Config.Actions.enabled` (default `false`): staff actions from the dashboard. Admins on a player's page can kick, warn
-(a chat message), freeze and unfreeze, and with tml_adminpanel 3.2.0 or newer ban and unban (its `RemoteBan` /
-`RemoteUnban` / `RemoteFreeze` exports, so bans live in its ban list and freezes show in its panel). Without
+(a chat message), freeze and unfreeze. With tml_adminpanel 3.2.0 or newer the dashboard becomes an outside admin panel
+for it: everything goes through its `Remote*` exports (warnings are kept in its warn list, bans in its ban list,
+freezes show in its panel, all of it in its log), revive, heal, ban, unban and announce are added, and its active bans
+are sent once a minute when they change, for the dashboard's Admin panel page (where they can be lifted). Without
 tml_adminpanel, freeze uses `FreezeEntityPosition` on the ped, which a respawn clears. Each action runs once, is logged
 as `admin` with the author "<dashboard user> (TML Monitor)". Staff are protected only from someone ranked below them:
 `Config.Actions.ranks` lists the ranks highest first, each player's rank is the first one they hold the ace
 `tml_monitor.rank.<name>` for (`add_ace group.admin tml_monitor.rank.admin allow`), dashboard owners outrank everyone
-and dashboard admins act as `Config.Actions.adminRank` (default `admin`). The list of actions is sent at start, so restart tml_monitor after
-starting or updating tml_adminpanel.
+and dashboard admins act as `Config.Actions.adminRank` (default `admin`). The list of actions is checked once a minute,
+so starting or stopping tml_adminpanel later is picked up on its own.
+
+## Other games (RCON)
+
+The TML Monitor dashboard can also watch a server of another game without this resource, over the game's RCON: who's
+online, joins and leaves, chat, and staff actions (kick, warn, ban, unban, announce, as the game allows). The owner sets
+it up on the dashboard's Team page with the server's address, RCON port and password. Supported: DayZ, Arma 3,
+Arma 2: OA, Arma Reforger, Rust, Minecraft (Java), ARK, Palworld, Squad, Post Scriptum, Beyond the Wire, Project
+Zomboid, Factorio, Counter-Strike 2, Mordhau, 7 Days to Die, Hell Let Loose (and Vietnam), Call of Duty 1, 2 and 4,
+Urban Terror, Wolfenstein: Enemy Territory, Quake III Arena and Source engine games (TF2, Garry's Mod, L4D2, CS:GO). The anti-cheat, frame times, economy and other pages this
+resource fills are not available over RCON.
 
 ## Licensing
 
@@ -159,7 +185,7 @@ most once per check per `cooldownSeconds`; the next log says how many more times
 
 Positions and the weapon in each player's hands are checked once a second per player, spread across ticks in small
 groups. A weapon that isn't in the player's inventory is only flagged if it's still in their hands 4 seconds later,
-and only with an inventory adapter that can tell (`HasWeapon` in `bridge/README.md`: ox_inventory, qb-inventory, ps-inventory, qs-inventory and core_inventory).
+and only with an inventory adapter that can tell (`HasWeapon` in `bridge/README.md`: ox_inventory, qb-inventory, ps-inventory, qs-inventory, core_inventory, and on RedM rsg-inventory and vorp_inventory).
 
 **Reported by the player's game.** A few checks can only run in the game itself. A cheat can hide them, so their
 flags say *reported by the player's game*, count for less in the risk score, and are checked again on the server
@@ -201,9 +227,10 @@ to players in *Who's online*.
 - **One extra global, `Monitor`:** the server files share state through it. `Config` and `L` are the usual globals.
 - **A read-only, server-only bridge:** TML Monitor never gives or takes anything, so its framework contract is
   `GetCharacter`, `GetJob`, `GetMoney` plus money and job events instead of the full STANDARDS contract, and there
-  are no target/notify/banking categories. Framework adapters: Qbox, QBCore, ESX, ox_core, ND_Core, vRP 1.x, standalone,
-  custom. Inventory: ox_inventory, qb-inventory, ps-inventory, standalone, custom, plus qs-inventory and
-  core_inventory for the weapon check only (they document no item events, so their items log through the export).
+  are no target/notify/banking categories. Framework adapters: Qbox, QBCore, ESX, ox_core, ND_Core, vRP 1.x, and on
+  RedM RSG Core and VORP, plus standalone and custom. Inventory: ox_inventory, qb-inventory, ps-inventory,
+  vorp_inventory, standalone, custom, plus qs-inventory, core_inventory and rsg-inventory for the weapon check only
+  (they have no item events, so their items log through the export).
   See `bridge/README.md`.
 - **No NUI:** the only client script is the FPS sampler; everything players could see lives on the dashboard.
 - **One per-tick loop (`Wait(0)`) on the server:** frame timing has to be measured every tick. A timer that
