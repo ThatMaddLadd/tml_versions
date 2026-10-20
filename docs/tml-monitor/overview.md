@@ -41,6 +41,20 @@ cost, the stats pass's cost, and batches sent and waiting. It times the resource
 
 Optional convar for testing against a local dev service: `set tml_monitor_url "http://127.0.0.1:8090"`.
 
+`Config.Actions.enabled` (default `false`): staff actions from the dashboard. Admins on a player's page can kick, warn
+(a chat message), freeze and unfreeze, and with tml_adminpanel 3.2.0 or newer ban and unban (its `RemoteBan` /
+`RemoteUnban` / `RemoteFreeze` exports, so bans live in its ban list and freezes show in its panel). Without
+tml_adminpanel, freeze uses `FreezeEntityPosition` on the ped, which a respawn clears. Each action runs once, is logged
+as `admin` with the author "<dashboard user> (TML Monitor)". Staff are protected only from someone ranked below them:
+`Config.Actions.ranks` lists the ranks highest first, each player's rank is the first one they hold the ace
+`tml_monitor.rank.<name>` for (`add_ace group.admin tml_monitor.rank.admin allow`), dashboard owners outrank everyone
+and dashboard admins act as `Config.Actions.adminRank` (default `admin`). The list of actions is sent at start, so restart tml_monitor after
+starting or updating tml_adminpanel.
+
+## Licensing
+
+tml_monitor only sends to the dashboard once its purchase is registered. Run `tml_registerproduct <your Tebex transaction id>` in the server console (find the id on your Tebex receipt, e.g. `tbx-1a2b3c...`). It checks the id with the TML Monitor service and, if it is a genuine unrefunded purchase not already registered to another server, unlocks sending. If the service can't be reached, the last valid answer is kept for 72 hours (the grace period) so an outage never locks out a real customer; past that it locks until it can check again. A failed, reused or refunded licence only locks the features and prints a console message — it never deletes or changes your files. The id is bound to this server; to move hosts, release it on the dashboard (Admin page) and register again. The check uses the Node HTTP helper (`server/http.js`), the same path batches use, since FXServer blocks direct Lua calls to the service domain.
+
 ## What is sent
 
 - Every 15 s: players online and slots, server frame time (p50 / p95 / max), hitches per minute (frames over

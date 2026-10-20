@@ -3,6 +3,7 @@
     {
       "slug": "tml-pager",
       "name": "TML Pager",
+      "game": "fivem",
       "summary": "A pager for every player on the server, with retro looks and modern features: an LCD screen, four hardware buttons and a translucent purple shell.",
       "version": "1.1.0",
       "updated": "2026-09-30",
@@ -32,6 +33,7 @@
     {
       "slug": "tml-admin-panel",
       "name": "TML Admin Panel",
+      "game": "fivem",
       "summary": "An in-game administration panel for FiveM by ThatMaddLadd.",
       "version": "3.1.1",
       "updated": "2026-10-10",
@@ -61,6 +63,7 @@
     {
       "slug": "tml-phone",
       "name": "TML Phone",
+      "game": "fivem",
       "summary": "A flip phone and a smartphone on one shared core. Both run on the same numbers, contacts and messages, so a player can text from a smartphone to a friend's flip phone.",
       "version": "1.2.0",
       "updated": "2026-10-10",
@@ -90,6 +93,7 @@
     {
       "slug": "tml-radio",
       "name": "TML Radio",
+      "game": "fivem",
       "summary": "A handheld two-way radio for FiveM. Tune by keypad, channel buttons or presets. Emergency services get locked frequency ranges with a member list, callsigns and a panic button.",
       "version": "1.0.0",
       "updated": "2026-10-01",
@@ -119,6 +123,7 @@
     {
       "slug": "tml-billing",
       "name": "TML Billing",
+      "game": "fivem",
       "summary": "Invoices and fines for FiveM.",
       "version": "1.1.0",
       "updated": "2026-10-10",
@@ -148,6 +153,7 @@
     {
       "slug": "tml-queue",
       "name": "TML Queue",
+      "game": "fivem",
       "summary": "A connection queue for FiveM. When the server is full, players wait in line on a live queue card that shows their position, priority, time waited and an estimated wait.",
       "version": "1.0.0",
       "updated": "2026-10-01",
@@ -177,6 +183,7 @@
     {
       "slug": "tml-monitor",
       "name": "TML Monitor",
+      "game": "fivem",
       "summary": "FiveM resource for TML Monitor. It measures your server and sends the data to the TML Monitor dashboard.",
       "version": "0.6.0",
       "updated": "2026-10-10",
@@ -194,6 +201,7 @@
     {
       "slug": "tml-banking",
       "name": "TML Banking",
+      "game": "fivem",
       "summary": "A full bank for FiveM: personal, savings, business, job and gang accounts, bank cards with PINs, loans with a credit score, interest, transfers, statements, an admin panel and Discord logs.",
       "version": "1.0.0",
       "updated": "2026-10-10",

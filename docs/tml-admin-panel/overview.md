@@ -69,6 +69,9 @@ Press **F7** (rebindable in FiveM keybind settings) to open the panel. Tabs appe
 
 ## Documentation
 
+TML Monitor can ban, unban and freeze through this panel from its dashboard (3.2.0+, server-side `Remote*` exports,
+see `docs/API.md`). Those show in the panel's log under the dashboard user's name.
+
 - `docs/CONFIG.md`: every option and permission
 - `docs/API.md`: exports and events for your own scripts
 - `docs/FAQ.md`: common problems

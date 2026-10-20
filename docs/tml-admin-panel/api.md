@@ -28,6 +28,32 @@ Same arguments. Returns the plain-text version of the ban screen.
 Returns `{ mode = 'card', card = <json>, text = <string> }` or `{ mode = 'text', text = <string> }`, following
 `Config.BanScreenMode`.
 
+### `RemoteBan(target, reason, durationSeconds, byName) -> boolean, string`
+
+Bans an online player (`target` = server id) or an identifier (`'license2:…'`, `'discord:…'`; every identifier the
+framework has stored for that account is banned too). `durationSeconds` 0 is permanent. Returns `true, 'BAN-…'` or
+`false, why`. Logged in the panel as `byName`. Used by TML Monitor's dashboard actions.
+
+```lua
+local ok, ref = exports.tml_adminpanel:RemoteBan(12, 'Cheating', 7 * 86400, 'Richy (TML Monitor)')
+```
+
+### `RemoteUnban(identifier, byName) -> boolean, string?`
+
+Lifts the active ban matching an identifier. Returns `true`, or `false, why`.
+
+```lua
+exports.tml_adminpanel:RemoteUnban('license2:abc123…', 'Richy (TML Monitor)')
+```
+
+### `RemoteFreeze(targetId, frozen, byName) -> boolean, string?`
+
+Freezes (`frozen = true`) or unfreezes an online player, the same freeze as the panel's button.
+
+```lua
+exports.tml_adminpanel:RemoteFreeze(12, true, 'Richy (TML Monitor)')
+```
+
 ### `captureScreenshot(targetId, opts) -> table?, string?`
 
 Captures a player's screen and stores it in the evidence gallery. Needs screenshot-basic and the upload key.
