@@ -70,8 +70,10 @@ so starting or stopping tml_adminpanel later is picked up on its own.
 ## Other games (RCON)
 
 The TML Monitor dashboard can also watch a server of another game without this resource, over the game's RCON: who's
-online, joins and leaves, chat, and staff actions (kick, warn, ban, unban, announce, as the game allows). The owner sets
-it up on the dashboard's Team page with the server's address, RCON port and password. Supported: DayZ, Arma 3,
+online, joins and leaves, chat, and staff actions (kick, warn, ban, unban, announce, as the game allows). Its Admin
+panel page adds the game's server controls (lock, save, restart, change map and so on, as the game has them), a console
+for the owner, and the bans sent from the dashboard. The owner sets it up on the dashboard's Team page with the
+server's address, RCON port and password. Supported: DayZ, Arma 3,
 Arma 2: OA, Arma Reforger, Rust, Minecraft (Java), ARK, Palworld, Squad, Post Scriptum, Beyond the Wire, Project
 Zomboid, Factorio, Counter-Strike 2, Mordhau, 7 Days to Die, Hell Let Loose (and Vietnam), Call of Duty 1, 2 and 4,
 Urban Terror, Wolfenstein: Enemy Territory, Quake III Arena and Source engine games (TF2, Garry's Mod, L4D2, CS:GO). The anti-cheat, frame times, economy and other pages this
